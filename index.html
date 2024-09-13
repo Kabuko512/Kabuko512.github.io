@@ -45,7 +45,7 @@
             left: 15px;
         }
         .balloon.popping {
-            animation: explode 0.3s forwards;
+            animation: explode 0.6s forwards;
         }
 
         @keyframes explode {
@@ -61,7 +61,7 @@
 
         /* Nowa animacja fragmentów balonu */
         .balloon:before, .balloon:after {
-            transition: transform 0.3s, opacity 0.3s;
+            transition: transform 0.6s, opacity 0.6s;
         }
         .balloon.popping:before {
             transform: translate(-50px, -50px) scale(0.5);
@@ -166,10 +166,12 @@
         function popBalloon(balloon) {
             balloon.classList.add('popping');
             playPopSound();
+            
+            // Opóźnienie usunięcia balonu, aby animacja mogła się zakończyć
             setTimeout(() => {
                 balloon.remove();
                 createBalloon();
-            }, 300);
+            }, 600); // Opóźnienie 600 ms, które synchronizuje się z animacją eksplozji
         }
 
         function playPopSound() {
