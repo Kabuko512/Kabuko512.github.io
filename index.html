@@ -21,6 +21,8 @@
             border-radius: 50%;
             box-shadow: inset -10px -10px 20px rgba(0,0,0,0.3);
             animation: float 15s infinite ease-in-out;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
         .balloon:before {
             content: "";
@@ -41,6 +43,10 @@
             background: radial-gradient(circle at 70% 30%, #ffffff, transparent 50%);
             top: 10px;
             left: 15px;
+        }
+        .balloon.popping {
+            transform: scale(1.2);
+            opacity: 0;
         }
         .candle {
             position: absolute;
@@ -112,6 +118,10 @@
             balloon.style.top = window.innerHeight + 'px';
             document.body.appendChild(balloon);
             
+            balloon.addEventListener('click', () => {
+                popBalloon(balloon);
+            });
+
             let start = null;
             let duration = 15000 + Math.random() * 10000;
             function animate(timestamp) {
@@ -119,7 +129,7 @@
                 const progress = timestamp - start;
                 const percent = Math.min(progress / duration, 1);
                 balloon.style.top = `${window.innerHeight - percent * (window.innerHeight + 200)}px`;
-                if (progress < duration) {
+                if (progress < duration && !balloon.classList.contains('popping')) {
                     requestAnimationFrame(animate);
                 } else {
                     balloon.remove();
@@ -127,6 +137,33 @@
                 }
             }
             requestAnimationFrame(animate);
+        }
+
+        function popBalloon(balloon) {
+            balloon.classList.add('popping');
+            playPopSound();
+            setTimeout(() => {
+                balloon.remove();
+                createBalloon();
+            }, 300);
+        }
+
+        function playPopSound() {
+            const popContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = popContext.createOscillator();
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(400, popContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(30, popContext.currentTime + 0.1);
+            
+            const gainNode = popContext.createGain();
+            gainNode.gain.setValueAtTime(1, popContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, popContext.currentTime + 0.1);
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(popContext.destination);
+            
+            oscillator.start();
+            oscillator.stop(popContext.currentTime + 0.1);
         }
 
         function createCandle() {
@@ -169,10 +206,14 @@
 
             setTimeout(() => {
                 isPlaying = false;
+                playHappyBirthday(); // Odtwórz ponownie po zakończeniu
             }, time * 1000);
         }
 
-        document.addEventListener('click', playHappyBirthday);
+        // Automatyczne odtwarzanie muzyki po załadowaniu strony
+        window.addEventListener('load', () => {
+            setTimeout(playHappyBirthday, 10); // Opóźnienie 1 sekundy przed rozpoczęciem odtwarzania
+        });
 
         interact('.draggable').draggable({
             listeners: {
