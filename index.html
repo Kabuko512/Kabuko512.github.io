@@ -167,11 +167,11 @@
             balloon.classList.add('popping');
             playPopSound();
             
-            // Opóźnienie usunięcia balonu, aby animacja mogła się zakończyć
-            setTimeout(() => {
+            // Zdarzenie 'animationend' poczeka na zakończenie animacji zanim usunie balon
+            balloon.addEventListener('animationend', () => {
                 balloon.remove();
                 createBalloon();
-            }, 600); // Opóźnienie 600 ms, które synchronizuje się z animacją eksplozji
+            });
         }
 
         function playPopSound() {
