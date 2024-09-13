@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wszystkiego najlepszego, Anastazjo!</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.10.11/interact.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -14,16 +12,18 @@
             overflow: hidden;
             font-family: 'Pacifico', cursive;
         }
+
         .balloon {
             position: absolute;
             width: 120px;
             height: 145px;
             border-radius: 50%;
-            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.3);
-            animation: float 15s infinite ease-in-out;
+            background-color: red;
+            box-shadow: inset -10px -10px 20px rgba(0, 0, 0, 0.3);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease, opacity 0.3s ease;
         }
+
         .balloon:before {
             content: "";
             position: absolute;
@@ -34,6 +34,7 @@
             left: 55px;
             transform: skew(5deg);
         }
+
         .balloon:after {
             content: "";
             position: absolute;
@@ -44,30 +45,37 @@
             top: 10px;
             left: 15px;
         }
-        .balloon.popping {
-            transform: scale(1.2);
-            opacity: 0;
+
+        /* Animacja unoszenia balonów */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
-        .candle {
-            position: absolute;
-            width: 20px;
-            height: 60px;
-            background-color: #fff;
-            bottom: 0;
+
+        .balloon {
+            animation: float 6s ease-in-out infinite;
         }
-        .flame {
-            position: absolute;
-            width: 20px;
-            height: 30px;
-            background-color: #ffa500;
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            top: -25px;
-            animation: flicker 0.5s infinite alternate;
+
+        /* Animacja pęknięcia balona */
+        .popping {
+            animation: pop 0.3s ease-out forwards;
         }
-        .draggable {
-            touch-action: none;
-            user-select: none;
+
+        @keyframes pop {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
         }
+
+        /* Tekst urodzinowy */
         #birthday-text {
             position: absolute;
             top: 50%;
@@ -75,24 +83,15 @@
             transform: translate(-50%, -50%);
             font-size: 3em;
             text-align: center;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            cursor: move;
+            color: #ff6b6b;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             animation: rainbow 5s ease infinite;
         }
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-20px) rotate(5deg); }
-            50% { transform: translateY(-35px) rotate(-5deg); }
-            75% { transform: translateY(-20px) rotate(3deg); }
-        }
-        @keyframes flicker {
-            0% { transform: scale(1); }
-            100% { transform: scale(0.9); }
-        }
+
         @keyframes rainbow {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -101,133 +100,65 @@
     </style>
 </head>
 <body>
-    <div id="birthday-text" class="draggable">
+
+    <!-- Tekst urodzinowy -->
+    <div id="birthday-text">
         Wszystkiego najlepszego,<br>Anastazjo!<br>🎉 18 lat 🎂
     </div>
-    <script>
-        let audioContext;
-        let isPlaying = false;
 
+    <script>
+        // Funkcja do tworzenia balonów
         function createBalloon() {
             const balloon = document.createElement('div');
             balloon.classList.add('balloon');
+
+            // Ustawianie losowego koloru balonu
             const hue = Math.random() * 360;
-            const lightness = 50 + Math.random() * 20;
-            balloon.style.background = `linear-gradient(135deg, hsl(${hue}, 100%, ${lightness}%), hsl(${hue}, 100%, ${lightness - 20}%))`;
+            balloon.style.background = `linear-gradient(135deg, hsl(${hue}, 100%, 50%), hsl(${hue}, 100%, 30%))`;
+
+            // Ustawianie losowej pozycji startowej balonu
             balloon.style.left = Math.random() * (window.innerWidth - 120) + 'px';
             balloon.style.top = window.innerHeight + 'px';
-            document.body.appendChild(balloon);
-            
-            balloon.addEventListener('click', () => {
-                popBalloon(balloon);
-            });
 
+            document.body.appendChild(balloon);
+
+            // Dodanie animacji unoszenia
+            let duration = 10000 + Math.random() * 10000;
             let start = null;
-            let duration = 15000 + Math.random() * 10000;
-            function animate(timestamp) {
+            function animateBalloon(timestamp) {
                 if (!start) start = timestamp;
                 const progress = timestamp - start;
                 const percent = Math.min(progress / duration, 1);
                 balloon.style.top = `${window.innerHeight - percent * (window.innerHeight + 200)}px`;
+
                 if (progress < duration && !balloon.classList.contains('popping')) {
-                    requestAnimationFrame(animate);
+                    requestAnimationFrame(animateBalloon);
                 } else {
                     balloon.remove();
-                    createBalloon();
+                    createBalloon();  // Tworzenie nowego balonu po usunięciu
                 }
             }
-            requestAnimationFrame(animate);
+            requestAnimationFrame(animateBalloon);
+
+            // Obsługa kliknięcia - pękanie balonu
+            balloon.addEventListener('click', () => {
+                popBalloon(balloon);
+            });
         }
 
+        // Funkcja pękania balonu
         function popBalloon(balloon) {
             balloon.classList.add('popping');
-            playPopSound();
             setTimeout(() => {
                 balloon.remove();
-                createBalloon();
-            }, 300);
+                createBalloon();  // Tworzenie nowego balonu po pęknięciu
+            }, 300); // Czas trwania animacji pęknięcia
         }
 
-        function playPopSound() {
-            const popContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = popContext.createOscillator();
-            oscillator.type = 'sine';
-            oscillator.frequency.setValueAtTime(400, popContext.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(30, popContext.currentTime + 0.1);
-            
-            const gainNode = popContext.createGain();
-            gainNode.gain.setValueAtTime(1, popContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, popContext.currentTime + 0.1);
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(popContext.destination);
-            
-            oscillator.start();
-            oscillator.stop(popContext.currentTime + 0.1);
-        }
-
-        function createCandle() {
-            const candle = document.createElement('div');
-            candle.classList.add('candle');
-            candle.style.left = Math.random() * window.innerWidth + 'px';
-            const flame = document.createElement('div');
-            flame.classList.add('flame');
-            candle.appendChild(flame);
-            document.body.appendChild(candle);
-        }
-
+        // Tworzenie 10 balonów
         for (let i = 0; i < 10; i++) {
             createBalloon();
-            createCandle();
         }
-
-        function playHappyBirthday() {
-            if (isPlaying) return;
-            
-            isPlaying = true;
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const notes = [
-                0, 0, 2, 0, 5, 4, 0, 0, 2, 0, 7, 5, 0, 0, 12, 9, 5, 4, 2, 10, 10, 9, 5, 7, 5
-            ];
-            const durations = [
-                0.25, 0.25, 0.5, 0.5, 0.5, 1, 0.25, 0.25, 0.5, 0.5, 0.5, 1, 0.25, 0.25, 0.5, 0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.5, 0.5, 1
-            ];
-            let time = audioContext.currentTime;
-            
-            notes.forEach((note, index) => {
-                const oscillator = audioContext.createOscillator();
-                oscillator.type = 'sine';
-                oscillator.frequency.value = 261.6 * Math.pow(2, note / 12);
-                oscillator.connect(audioContext.destination);
-                oscillator.start(time);
-                oscillator.stop(time + durations[index]);
-                time += durations[index];
-            });
-
-            setTimeout(() => {
-                isPlaying = false;
-                playHappyBirthday(); // Odtwórz ponownie po zakończeniu
-            }, time * 1000);
-        }
-
-        // Automatyczne odtwarzanie muzyki po załadowaniu strony
-        window.addEventListener('load', () => {
-            setTimeout(playHappyBirthday, 10); // Opóźnienie 1 sekundy przed rozpoczęciem odtwarzania
-        });
-
-        interact('.draggable').draggable({
-            listeners: {
-                move(event) {
-                    const target = event.target;
-                    const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
-                    const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-                    target.style.transform = `translate(${x}px, ${y}px)`;
-                    target.setAttribute('data-x', x);
-                    target.setAttribute('data-y', y);
-                }
-            }
-        });
     </script>
 </body>
 </html>
