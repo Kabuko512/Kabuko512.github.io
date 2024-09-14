@@ -96,6 +96,17 @@
             color: transparent;
             animation: rainbow 5s ease infinite;
         }
+        #counter {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 2em;
+            color: #333;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }
             25% { transform: translateY(-20px) rotate(5deg); }
@@ -117,9 +128,16 @@
     <div id="birthday-text" class="draggable">
         Wszystkiego najlepszego,<br>Anastazjo!<br>🎉 18 lat 🎂
     </div>
+    <div id="counter">Pęknięte balony: 0</div>
     <script>
         let audioContext;
         let isPlaying = false;
+        let balloonCount = 0; // Zmienna do śledzenia liczby pękniętych balonów
+
+        function updateCounter() {
+            const counter = document.getElementById('counter');
+            counter.textContent = `Pęknięte balony: ${balloonCount}`;
+        }
 
         function createBalloon() {
             const balloon = document.createElement('div');
@@ -155,6 +173,10 @@
         function popBalloon(balloon) {
             balloon.classList.add('explode'); // Dodajemy klasę 'explode' dla animacji
             playPopSound();
+            
+            // Zwiększamy licznik pękniętych balonów i aktualizujemy wyświetlacz
+            balloonCount++;
+            updateCounter();
 
             balloon.addEventListener('animationend', () => {
                 balloon.remove(); // Usuwamy balon dopiero po zakończeniu animacji
