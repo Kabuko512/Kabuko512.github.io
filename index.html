@@ -44,28 +44,14 @@
             top: 10px;
             left: 15px;
         }
-
-        .balloon-fragment {
+        .balloon-piece {
             position: absolute;
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background-color: inherit;
             opacity: 1;
-            animation: explode-fragment 0.6s forwards;
+            transition: all 0.5s ease;
         }
-
-        @keyframes explode-fragment {
-            0% {
-                transform: scale(1) translate(0, 0);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(0.5) translate(var(--tx, 0), var(--ty, 0));
-                opacity: 0;
-            }
-        }
-
         .candle {
             position: absolute;
             width: 20px;
@@ -101,16 +87,14 @@
             color: transparent;
             animation: rainbow 5s ease infinite;
         }
-        #counter {
+        #balloon-counter {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 2em;
-            color: #333;
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            top: 10px;
+            left: 10px;
+            font-size: 1.5em;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            z-index: 1000;
         }
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -127,22 +111,21 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+        @keyframes explode {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        }
     </style>
 </head>
 <body>
     <div id="birthday-text" class="draggable">
         Wszystkiego najlepszego,<br>Anastazjo!<br>🎉 18 lat 🎂
     </div>
-    <div id="counter">Pęknięte balony: 0</div>
+    <div id="balloon-counter">Pęknięte balony: 0</div>
     <script>
         let audioContext;
         let isPlaying = false;
-        let balloonCount = 0; // Zmienna do śledzenia liczby pękniętych balonów
-
-        function updateCounter() {
-            const counter = document.getElementById('counter');
-            counter.textContent = `Pęknięte balony: ${balloonCount}`;
-        }
+        let poppedBalloons = 0;
 
         function createBalloon() {
             const balloon = document.createElement('div');
@@ -160,12 +143,23 @@
 
             let start = null;
             let duration = 15000 + Math.random() * 10000;
+            let windOffset = 0;
+            let lastWindChange = 0;
             function animate(timestamp) {
                 if (!start) start = timestamp;
                 const progress = timestamp - start;
                 const percent = Math.min(progress / duration, 1);
+                
+                // Efekt wiatru
+                if (timestamp - lastWindChange > 1000) {
+                    windOffset = (Math.random() - 0.5) * 2;
+                    lastWindChange = timestamp;
+                }
+                const currentLeft = parseFloat(balloon.style.left);
+                balloon.style.left = `${currentLeft + windOffset}px`;
+                
                 balloon.style.top = `${window.innerHeight - percent * (window.innerHeight + 200)}px`;
-                if (progress < duration) {
+                if (progress < duration && !balloon.classList.contains('popping')) {
                     requestAnimationFrame(animate);
                 } else {
                     balloon.remove();
@@ -176,47 +170,43 @@
         }
 
         function popBalloon(balloon) {
-            playPopSound();
-            
-            // Ustawienie balonu jako niewidocznego
-            balloon.style.opacity = '0';
-
-            // Tworzenie fragmentów balonu
-            for (let i = 0; i < 6; i++) {
-                const fragment = document.createElement('div');
-                fragment.classList.add('balloon-fragment');
-                fragment.style.setProperty('--tx', `${Math.random() * 200 - 100}px`);
-                fragment.style.setProperty('--ty', `${Math.random() * 200 - 100}px`);
-                balloon.appendChild(fragment);
-            }
-
-            // Zwiększamy licznik pękniętych balonów i aktualizujemy wyświetlacz
-            balloonCount++;
-            updateCounter();
-
-            // Usunięcie balonu po zakończeniu animacji fragmentów
-            setTimeout(() => {
-                balloon.remove();
-                createBalloon();
-            }, 600); // 600 ms to czas trwania animacji
+            createBalloonPieces(balloon);
+            poppedBalloons++;
+            updateBalloonCounter();
+            balloon.remove();
+            setTimeout(createBalloon, 300);
         }
 
-        function playPopSound() {
-            const popContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = popContext.createOscillator();
-            oscillator.type = 'sine';
-            oscillator.frequency.setValueAtTime(400, popContext.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(30, popContext.currentTime + 0.1);
-            
-            const gainNode = popContext.createGain();
-            gainNode.gain.setValueAtTime(1, popContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, popContext.currentTime + 0.1);
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(popContext.destination);
-            
-            oscillator.start();
-            oscillator.stop(popContext.currentTime + 0.1);
+        function createBalloonPieces(balloon) {
+            const rect = balloon.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const color = getComputedStyle(balloon).background;
+
+            for (let i = 0; i < 8; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'balloon-piece';
+                piece.style.left = `${centerX}px`;
+                piece.style.top = `${centerY}px`;
+                piece.style.background = color;
+
+                const angle = (i / 8) * 2 * Math.PI;
+                const distance = 100 + Math.random() * 50;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+
+                piece.style.setProperty('--tx', `${tx}px`);
+                piece.style.setProperty('--ty', `${ty}px`);
+                piece.style.animation = 'explode 0.5s forwards';
+
+                document.body.appendChild(piece);
+                setTimeout(() => piece.remove(), 500);
+            }
+        }
+
+        function updateBalloonCounter() {
+            const counter = document.getElementById('balloon-counter');
+            counter.textContent = `Pęknięte balony: ${poppedBalloons}`;
         }
 
         function createCandle() {
@@ -265,7 +255,7 @@
 
         // Automatyczne odtwarzanie muzyki po załadowaniu strony
         window.addEventListener('load', () => {
-            setTimeout(playHappyBirthday, 100); // Opóźnienie 1 sekundy przed rozpoczęciem odtwarzania
+            setTimeout(playHappyBirthday, 1000); // Opóźnienie 1 sekundy przed rozpoczęciem odtwarzania
         });
 
         interact('.draggable').draggable({
