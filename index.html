@@ -34,13 +34,14 @@
         /* Stylizacja balonów */
         .balloon {
             position: absolute;
-            bottom: -150px;
+            bottom: 0;
             width: 50px;
             height: 70px;
             background-color: #ff69b4;
             border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
             cursor: pointer;
             animation: floatUp linear infinite, sway ease-in-out infinite;
+            z-index: 2;
         }
 
         .balloon::after {
@@ -103,13 +104,20 @@
             transform: translateX(-50%);
             width: 100px;
             height: 200px;
-            background-color: #8B4513; /* Brązowy kolor */
-            border-radius: 50px;
-            animation: dance 1s infinite;
+            overflow: visible;
             z-index: 1;
         }
 
-        .dancer::before, .dancer::after {
+        .dancer-body {
+            width: 100%;
+            height: 100%;
+            background-color: #8B4513; /* Brązowy kolor */
+            border-radius: 50px;
+            animation: dance 1s infinite;
+            transform-origin: bottom;
+        }
+
+        .dancer-body::before, .dancer-body::after {
             content: '';
             position: absolute;
             width: 20px;
@@ -118,13 +126,13 @@
             top: 50px;
         }
 
-        .dancer::before {
+        .dancer-body::before {
             left: -30px;
             transform-origin: top;
             animation: arm-left 1s infinite;
         }
 
-        .dancer::after {
+        .dancer-body::after {
             right: -30px;
             transform-origin: top;
             animation: arm-right 1s infinite;
@@ -132,10 +140,10 @@
 
         @keyframes dance {
             0%, 100% {
-                transform: translateX(-50%) rotate(0deg);
+                transform: rotate(0deg);
             }
             50% {
-                transform: translateX(-50%) rotate(10deg);
+                transform: rotate(10deg);
             }
         }
 
@@ -164,7 +172,9 @@
 
 <div id="counter">Zestrzelone balony: 0</div>
 
-<div class="dancer"></div>
+<div class="dancer">
+    <div class="dancer-body"></div>
+</div>
 
 <audio id="bg-music" autoplay loop>
     <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_76e0c9e3b6.mp3?filename=happy-birthday-13399.mp3" type="audio/mpeg">
@@ -178,6 +188,75 @@
         const balloon = document.createElement('div');
         balloon.classList.add('balloon');
 
-        const xPosition = Math.random() * (window.innerWidth - 50);
+        const size = Math.random() * 30 + 40; // Rozmiar od 40 do 70 pikseli
+        const xPosition = Math.random() * (window.innerWidth - size);
         const duration = Math.random() * 5 + 5; // Od 5 do 10 sekund
-        const size = Ma
+
+        balloon.style.left = xPosition + 'px';
+        balloon.style.animationDuration = duration + 's, ' + (Math.random() * 2 + 2) + 's';
+        balloon.style.width = size + 'px';
+        balloon.style.height = size * 1.4 + 'px'; // Zachowanie proporcji balonu
+        balloon.style.borderRadius = '50% 50% 50% 50% / 60% 60% 40% 40%';
+        balloon.style.backgroundColor = getRandomColor();
+
+        // Dostosowanie pozycji ogonka
+        const tail = document.createElement('div');
+        tail.style.position = 'absolute';
+        tail.style.left = '50%';
+        tail.style.bottom = '-20px';
+        tail.style.width = '2px';
+        tail.style.height = '20px';
+        tail.style.backgroundColor = '#555';
+        tail.style.transform = 'translateX(-50%)';
+        balloon.appendChild(tail);
+
+        balloon.addEventListener('click', function() {
+            popBalloon(balloon);
+        });
+
+        balloon.addEventListener('touchstart', function() {
+            popBalloon(balloon);
+        });
+
+        document.body.appendChild(balloon);
+
+        // Usunięcie balonu po animacji
+        balloon.addEventListener('animationend', function() {
+            balloon.remove();
+        });
+    }
+
+    function popBalloon(balloon) {
+        // Pozycja balonu
+        const rect = balloon.getBoundingClientRect();
+
+        // Tworzenie eksplozji
+        const explosion = document.createElement('div');
+        explosion.classList.add('explosion');
+        explosion.style.left = rect.left + 'px';
+        explosion.style.top = rect.top + 'px';
+
+        document.body.appendChild(explosion);
+
+        explosion.addEventListener('animationend', function() {
+            explosion.remove();
+        });
+
+        // Usuwanie balonu
+        balloon.remove();
+
+        // Aktualizacja licznika
+        balloonCount++;
+        document.getElementById('counter').innerText = 'Zestrzelone balony: ' + balloonCount;
+    }
+
+    function getRandomColor() {
+        const colors = ['#ff69b4', '#ff6347', '#ffa500', '#9acd32', '#1e90ff', '#9370db'];
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    setInterval(createBalloon, 1000);
+</script>
+
+</body>
+</html>
