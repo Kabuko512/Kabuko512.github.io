@@ -9,6 +9,7 @@
             overflow: hidden;
             background-color: #87CEFA;
             font-family: Arial, sans-serif;
+            position: relative;
         }
 
         h1 {
@@ -16,6 +17,8 @@
             color: #fff;
             margin-top: 20px;
             text-shadow: 2px 2px #000;
+            z-index: 10;
+            position: relative;
         }
 
         #counter {
@@ -25,8 +28,10 @@
             color: #fff;
             font-size: 24px;
             text-shadow: 1px 1px #000;
+            z-index: 10;
         }
 
+        /* Stylizacja balonów */
         .balloon {
             position: absolute;
             bottom: -150px;
@@ -35,7 +40,7 @@
             background-color: #ff69b4;
             border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
             cursor: pointer;
-            animation: floatUp linear infinite;
+            animation: floatUp linear infinite, sway ease-in-out infinite;
         }
 
         .balloon::after {
@@ -58,6 +63,16 @@
             }
         }
 
+        @keyframes sway {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(30px);
+            }
+        }
+
+        /* Eksplozja */
         .explosion {
             position: absolute;
             width: 50px;
@@ -66,6 +81,7 @@
             background-size: contain;
             animation: explode 0.5s forwards;
             pointer-events: none;
+            z-index: 9;
         }
 
         @keyframes explode {
@@ -78,6 +94,68 @@
                 transform: scale(2);
             }
         }
+
+        /* Tańcząca postać */
+        .dancer {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 200px;
+            background-color: #8B4513; /* Brązowy kolor */
+            border-radius: 50px;
+            animation: dance 1s infinite;
+            z-index: 1;
+        }
+
+        .dancer::before, .dancer::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 100px;
+            background-color: #8B4513;
+            top: 50px;
+        }
+
+        .dancer::before {
+            left: -30px;
+            transform-origin: top;
+            animation: arm-left 1s infinite;
+        }
+
+        .dancer::after {
+            right: -30px;
+            transform-origin: top;
+            animation: arm-right 1s infinite;
+        }
+
+        @keyframes dance {
+            0%, 100% {
+                transform: translateX(-50%) rotate(0deg);
+            }
+            50% {
+                transform: translateX(-50%) rotate(10deg);
+            }
+        }
+
+        @keyframes arm-left {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(30deg);
+            }
+        }
+
+        @keyframes arm-right {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(-30deg);
+            }
+        }
     </style>
 </head>
 <body>
@@ -85,6 +163,8 @@
 <h1>Wszystkiego najlepszego z okazji 18 urodzin, Anastazjo!</h1>
 
 <div id="counter">Zestrzelone balony: 0</div>
+
+<div class="dancer"></div>
 
 <audio id="bg-music" autoplay loop>
     <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_76e0c9e3b6.mp3?filename=happy-birthday-13399.mp3" type="audio/mpeg">
@@ -100,58 +180,4 @@
 
         const xPosition = Math.random() * (window.innerWidth - 50);
         const duration = Math.random() * 5 + 5; // Od 5 do 10 sekund
-
-        balloon.style.left = xPosition + 'px';
-        balloon.style.animationDuration = duration + 's';
-        balloon.style.backgroundColor = getRandomColor();
-
-        balloon.addEventListener('click', function() {
-            popBalloon(balloon);
-        });
-
-        balloon.addEventListener('touchstart', function() {
-            popBalloon(balloon);
-        });
-
-        document.body.appendChild(balloon);
-
-        // Usunięcie balonu po animacji
-        balloon.addEventListener('animationend', function() {
-            balloon.remove();
-        });
-    }
-
-    function popBalloon(balloon) {
-        // Pozycja balonu
-        const rect = balloon.getBoundingClientRect();
-
-        // Tworzenie eksplozji
-        const explosion = document.createElement('div');
-        explosion.classList.add('explosion');
-        explosion.style.left = rect.left + 'px';
-        explosion.style.top = rect.top + 'px';
-
-        document.body.appendChild(explosion);
-
-        explosion.addEventListener('animationend', function() {
-            explosion.remove();
-        });
-
-        // Usuwanie balonu
-        balloon.remove();
-
-        // Aktualizacja licznika
-        balloonCount++;
-        document.getElementById('counter').innerText = 'Zestrzelone balony: ' + balloonCount;
-    }
-
-    function getRandomColor() {
-        const colors = ['#ff69b4', '#ff6347', '#ffa500', '#9acd32', '#1e90ff', '#9370db'];
-        return colors[Math.floor(Math.random() * colors.length)];
-    }
-
-    setInterval(createBalloon, 1000);
-</script>
-
-</body>
-</html>
+        const size = Ma
