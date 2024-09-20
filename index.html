@@ -10,6 +10,13 @@
             background-color: #87CEFA;
             font-family: Arial, sans-serif;
             position: relative;
+            transform: scaleY(-1); /* Odwrócenie ekranu */
+        }
+
+        h1, #counter {
+            transform: scaleY(-1); /* Odwrócenie tekstu z powrotem */
+            position: relative;
+            z-index: 10;
         }
 
         h1 {
@@ -17,8 +24,6 @@
             color: #fff;
             margin-top: 20px;
             text-shadow: 2px 2px #000;
-            z-index: 10;
-            position: relative;
         }
 
         #counter {
@@ -28,39 +33,37 @@
             color: #fff;
             font-size: 24px;
             text-shadow: 1px 1px #000;
-            z-index: 10;
         }
 
         /* Stylizacja balonów */
         .balloon {
             position: absolute;
-            bottom: 0;
+            top: 0; /* Zmiana z bottom: 0; */
             width: 50px;
             height: 70px;
             background-color: #ff69b4;
             border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
             cursor: pointer;
-            animation: floatUp linear infinite, sway ease-in-out infinite;
+            animation: floatDown linear infinite, sway ease-in-out infinite;
             z-index: 2;
         }
 
-        .balloon::after {
-            content: '';
+        .balloon div {
             position: absolute;
             left: 50%;
-            bottom: -20px;
+            top: -20px; /* Zmiana z bottom: -20px; */
             width: 2px;
             height: 20px;
             background-color: #555;
             transform: translateX(-50%);
         }
 
-        @keyframes floatUp {
+        @keyframes floatDown {
             from {
                 transform: translateY(0);
             }
             to {
-                transform: translateY(-120vh);
+                transform: translateY(120vh);
             }
         }
 
@@ -83,6 +86,7 @@
             animation: explode 0.5s forwards;
             pointer-events: none;
             z-index: 9;
+            transform: scaleY(-1); /* Odwrócenie eksplozji */
         }
 
         @keyframes explode {
@@ -99,9 +103,9 @@
         /* Tańcząca postać */
         .dancer {
             position: absolute;
-            bottom: 0;
+            top: 0; /* Zmiana z bottom: 0; */
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%) scaleY(-1); /* Odwrócenie postaci */
             width: 100px;
             height: 200px;
             overflow: visible;
@@ -203,7 +207,7 @@
         const tail = document.createElement('div');
         tail.style.position = 'absolute';
         tail.style.left = '50%';
-        tail.style.bottom = '-20px';
+        tail.style.top = -20 + 'px'; // Zmiana z bottom na top
         tail.style.width = '2px';
         tail.style.height = '20px';
         tail.style.backgroundColor = '#555';
