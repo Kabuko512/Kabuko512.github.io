@@ -682,6 +682,53 @@
             from, to { border-color: transparent }
             50% { border-color: #0ff; }
         }
+
+        /* Add these media queries to your existing CSS */
+
+        @media screen and (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .nav-links li {
+                margin: 0;
+            }
+
+            .theme-toggle {
+                margin-top: 1rem;
+            }
+
+            /* Optional: Add hamburger menu for mobile */
+            .mobile-menu-btn {
+                display: block;
+                position: absolute;
+                right: 1rem;
+                top: 1rem;
+            }
+
+            .nav-links {
+                display: none; /* Hide by default on mobile */
+            }
+
+            .nav-links.active {
+                display: flex; /* Show when active class is added */
+            }
+        }
     </style>
 </head>
 <body>
