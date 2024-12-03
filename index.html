@@ -2,265 +2,1165 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Wszystkiego najlepszego, Anastazjo!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jakub Czaplicki - Portfolio</title>
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
+        /* Resetowanie stylów */
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Zmienne CSS dla motywów */
+        :root {
+            --primary: #0f172a;
+            --secondary: #1e293b;
+            --accent: #60a5fa;
+            --accent-rgb: 96, 165, 250;
+            --accent-transparent: rgba(var(--accent-rgb), 0.1);
+            --text: #e2e8f0;
+            --primary-rgb: 15, 23, 42;
+            --bg: #1a202c;
+            --card-bg: var(--secondary);
+            --card-hover: #2d3748;
+            --overlay-bg: rgba(255, 255, 255, 0.1);
+            --overlay-bg-hover: rgba(255, 255, 255, 0.2);
+        }
+
+        :root[data-theme="light"] {
+            --primary: #f8fafc;
+            --secondary: #e2e8f0;
+            --accent: #2563eb;
+            --accent-rgb: 37, 99, 235;
+            --accent-transparent: rgba(var(--accent-rgb), 0.1);
+            --text: #1e293b;
+            --primary-rgb: 248, 250, 252;
+            --bg: #f0f2f5;
+            --card-bg: var(--secondary);
+            --card-hover: #d9d9d9;
+            --overlay-bg: rgba(0, 0, 0, 0.05);
+            --overlay-bg-hover: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .hero {
+            position: relative;
+            min-height: 100vh;
             overflow: hidden;
-            background-color: #87CEFA;
-            font-family: Arial, sans-serif;
-            position: relative;
-            transform: scaleY(-1); /* Odwrócenie ekranu */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-dark);
         }
 
-        h1, #counter {
-            transform: scaleY(-1); /* Odwrócenie tekstu z powrotem */
-            position: relative;
-            z-index: 10;
-        }
-
-        h1 {
-            text-align: center;
-            color: #fff;
-            margin-top: 20px;
-            text-shadow: 2px 2px #000;
-        }
-
-        #counter {
+        .tech-background {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            color: #fff;
-            font-size: 24px;
-            text-shadow: 1px 1px #000;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.3)),
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,255,0.1) 3px, transparent 3px),
+                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,255,255,0.1) 3px, transparent 3px);
+            animation: gridMove 0s linear infinite;
         }
 
-        /* Stylizacja balonów */
-        .balloon {
-            position: absolute;
-            top: 0; /* Zmiana z bottom: 0; */
-            width: 50px;
-            height: 70px;
-            background-color: #ff69b4;
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            cursor: pointer;
-            animation: floatDown linear infinite, sway ease-in-out infinite;
+        .hero-content {
+            position: relative;
             z-index: 2;
+            padding: 2rem;
+            background: rgba(0,0,0,0.7);
+            border: 1px solid rgba(0,255,255,0.2);
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0,255,255,0.1);
+            backdrop-filter: blur(10px);
         }
 
-        .balloon div {
+        .name-container {
+            margin-bottom: 2rem;
+        }
+
+        .glitch {
+            font-size: 4rem;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0,255,255,0.5);
+            position: relative;
+            animation: glitchText 3s infinite;
+        }
+
+        .title-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background: rgba(0,255,255,0.1);
+            border-radius: 5px;
+        }
+
+        .typewriter {
+            color: #0ff;
+            border-right: 2px solid #0ff;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .tech-dots {
+            display: flex;
+            gap: 0.2rem;
+        }
+
+        .tech-dots span {
+            width: 4px;
+            height: 4px;
+            background: #0ff;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .contact-item {
+            position: relative;
+            padding: 1rem;
+            background: rgba(0,255,255,0.05);
+            border: 1px solid rgba(0,255,255,0.1);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .contact-item:hover {
+            background: rgba(0,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        .hover-effect {
             position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0,255,255,0.1), transparent);
+            transform: translateX(-100%);
+        }
+
+        .contact-item:hover .hover-effect {
+            transform: translateX(100%);
+            transition: transform 0.5s ease;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
+            animation: gradientBG 15s ease infinite;
+            opacity: 0.9;
+        }
+
+        .hero-icon {
+            position: absolute;
+            font-size: 500px;
+            color: var(--accent-transparent);
+            top: 50%;
             left: 50%;
-            top: -20px; /* Zmiana z bottom: -20px; */
-            width: 2px;
-            height: 20px;
-            background-color: #555;
-            transform: translateX(-50%);
-        }
-
-        @keyframes floatDown {
-            from {
-                transform: translateY(0);
-            }
-            to {
-                transform: translateY(120vh);
-            }
-        }
-
-        @keyframes sway {
-            0%, 100% {
-                transform: translateX(0);
-            }
-            50% {
-                transform: translateX(30px);
-            }
-        }
-
-        /* Eksplozja */
-        .explosion {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"><polygon points="25,0 30,20 50,25 30,30 25,50 20,30 0,25 20,20" fill="yellow"/></svg>') no-repeat center;
-            background-size: contain;
-            animation: explode 0.5s forwards;
-            pointer-events: none;
-            z-index: 9;
-            transform: scaleY(-1); /* Odwrócenie eksplozji */
-        }
-
-        @keyframes explode {
-            from {
-                opacity: 1;
-                transform: scale(1);
-            }
-            to {
-                opacity: 0;
-                transform: scale(2);
-            }
-        }
-
-        /* Tańcząca postać */
-        .dancer {
-            position: absolute;
-            top: 0; /* Zmiana z bottom: 0; */
-            left: 50%;
-            transform: translateX(-50%) scaleY(-1); /* Odwrócenie postaci */
-            width: 100px;
-            height: 200px;
-            overflow: visible;
+            transform: translate(-50%, -50%);
             z-index: 1;
         }
 
-        .dancer-body {
-            width: 100%;
-            height: 100%;
-            background-color: #8B4513; /* Brązowy kolor */
-            border-radius: 50px;
-            animation: dance 1s infinite;
-            transform-origin: bottom;
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease-out;
         }
 
-        .dancer-body::before, .dancer-body::after {
+        .hero p {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--overlay-bg);
+            border-radius: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            background: var(--overlay-bg-hover);
+            transform: translateY(-2px);
+        }
+
+        .contact-item i {
+            margin-right: 0.5rem;
+            color: var(--accent);
+        }
+
+        .section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--accent);
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        .section-title::before {
             content: '';
             position: absolute;
-            width: 20px;
-            height: 100px;
-            background-color: #8B4513;
-            top: 50px;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 100%;
+            background: var(--accent);
+            border-radius: 2px;
         }
 
-        .dancer-body::before {
-            left: -30px;
-            transform-origin: top;
-            animation: arm-left 1s infinite;
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+            text-align: center;
         }
 
-        .dancer-body::after {
-            right: -30px;
-            transform-origin: top;
-            animation: arm-right 1s infinite;
+        .timeline::before {
+            display: none;
         }
 
-        @keyframes dance {
-            0%, 100% {
-                transform: rotate(0deg);
+        .timeline-item {
+            margin: 0 auto 2rem;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 0.5rem;
+            position: relative;
+            transition: all 0.1s ease;
+            text-align: center;
+            max-width: 800px;
+            opacity: 1;
+        }
+
+        .timeline-item h3,
+        .timeline-item p {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-item ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        .timeline-item li {
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-item:hover {
+            transform: scale(1.05);
+            background: var(--card-hover);
+            z-index: 1;
+        }
+
+        .timeline-item:not(:hover) {
+            opacity: 0.8;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-card {
+            background: var(--secondary);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            opacity: 1;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .skill-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .certificate-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .certificate-item {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            opacity: 1;
+        }
+
+        .certificate-item:hover {
+            transform: scale(1.05);
+            background: var(--card-hover);
+            z-index: 1;
+        }
+
+        .certificate-item:not(:hover) {
+            opacity: 0.7;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
             }
-            50% {
-                transform: rotate(10deg);
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        @keyframes arm-left {
-            0%, 100% {
-                transform: rotate(0deg);
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes circuitMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+
+        @keyframes rotateBot {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.2); opacity: 0.3; }
+            100% { transform: scale(1); opacity: 0.2; }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
             }
-            50% {
-                transform: rotate(30deg);
+            .contact-info {
+                flex-direction: column;
+            }
+            .timeline-item {
+                margin-left: 1rem;
             }
         }
 
-        @keyframes arm-right {
-            0%, 100% {
-                transform: rotate(0deg);
+        .hero-image {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            margin-top: 2rem;
+        }
+
+        .skill-card h3 i {
+            margin-right: 0.5rem;
+            color: var(--accent);
+        }
+
+        /* Animacja obwodów */
+        .circuit-pattern {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            opacity: 0.1;
+            z-index: 0;
+            background: 
+                linear-gradient(90deg, var(--secondary) 2px, transparent 2px) 0 0,
+                linear-gradient(0deg, var(--secondary) 2px, transparent 2px) 0 0;
+            background-size: 50px 50px;
+            animation: circuitMove 20s linear infinite;
+        }
+
+        /* Ikony w narożnikach */
+        .corner-icon {
+            position: fixed;
+            font-size: 3rem;
+            color: var(--accent);
+            opacity: 0.2;
+            z-index: 1;
+        }
+
+        .corner-icon.bottom-left {
+            bottom: 20px;
+            left: 20px;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .corner-icon.bottom-right {
+            bottom: 20px;
+            right: 20px;
+            animation: rotateBot 8s linear infinite reverse;
+        }
+
+        /* Styl robota śledzącego kursor */
+        .following-robot {
+            position: fixed;
+            font-size: 4rem;
+            color: var(--accent);
+            opacity: 0.2;
+            pointer-events: none;
+            transition: all 0.3s ease-out;
+            z-index: 0;
+        }
+
+        /* Efekt PLC bits */
+        .plc-bits {
+            position: fixed;
+            pointer-events: none;
+            font-family: monospace;
+            color: var(--accent);
+            opacity: 0.15;
+            font-size: 18px;
+            z-index: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .plc-bits:hover {
+            opacity: 0.3;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.15; }
+            50% { opacity: 0.4; }
+        }
+
+        .skill-card:hover::before {
+            background: linear-gradient(90deg, 
+                var(--accent) 0%, 
+                #4f46e5 50%, 
+                var(--accent) 100%
+            );
+            background-size: 200% 100%;
+            animation: moveGradient 2s linear infinite;
+        }
+
+        @keyframes moveGradient {
+            0% { background-position: 100% 0%; }
+            100% { background-position: -100% 0%; }
+        }
+
+        /* Przycisk zmiany motywu */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--secondary);
+            color: var(--text);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            background: var(--accent);
+            color: var(--secondary);
+        }
+
+        /* Ekran ładowania */
+        .loader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
+            padding: 2rem;
+            font-family: 'Courier New', monospace;
+            color: #0f0;
+            overflow: hidden;
+        }
+
+        .bios-screen {
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        .bios-line {
+            margin: 0;
+            padding: 2px 0;
+            white-space: pre;
+        }
+
+        .bios-line.final-message {
+            font-size: 2rem;
+            text-align: center;
+            margin-top: 20px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes cursor-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background: #0f0;
+            margin-left: 5px;
+            animation: cursor-blink 1s infinite;
+        }
+
+        /* Add this to your CSS */
+        .table-of-contents {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(32, 33, 36, 0.9);
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+            z-index: 100;
+        }
+
+        .toc-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #00ff00;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .table-of-contents ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .table-of-contents li {
+            margin: 0.5rem 0;
+        }
+
+        .table-of-contents a {
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            padding: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .table-of-contents a:hover {
+            color: #00ff00;
+            background: rgba(0, 255, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        .table-of-contents i {
+            width: 16px;
+        }
+
+        @media (max-width: 1200px) {
+            .table-of-contents {
+                display: none;
             }
-            50% {
-                transform: rotate(-30deg);
-            }
+        }
+
+        /* Add these styles for active state */
+        .table-of-contents a.active {
+            color: #00ff00;
+            background: rgba(0, 255, 0, 0.1);
+            border-radius: 4px;
+            border-left: 3px solid #00ff00;
+        }
+
+        @keyframes gridMove {
+            from { background-position: 0 0; }
+            to { background-position: 50px 50px; }
+        }
+
+        @keyframes glitchText {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #0ff; }
         }
     </style>
 </head>
 <body>
+    <!-- Update TOC structure -->
+    <nav class="table-of-contents">
+        <div class="toc-header">
+            <i class="fas fa-list"></i>
+            <span>Spis treści</span>
+        </div>
+        <ul>
+            <li><a href="#home"><i class="fas fa-home"></i> Start</a></li>
+            <li><a href="#about"><i class="fas fa-user"></i> O mnie</a></li>
+            <li><a href="#experience"><i class="fas fa-briefcase"></i> Doświadczenie</a></li>
+            <li><a href="#skills"><i class="fas fa-tools"></i> Umiejętności</a></li>
+            <li><a href="#education"><i class="fas fa-graduation-cap"></i> Edukacja</a></li>
+        </ul>
+    </nav>
+    <div class="loader-container">
+        <div class="bios-screen">
+            <div id="bios-text"></div>
+        </div>
+    </div>
+    <button class="theme-toggle" aria-label="Toggle theme">
+        <i class="fas fa-sun"></i>
+    </button>
+    <i class="fas fa-robot following-robot"></i>
+    <!-- Wzór obwodów -->
+    <div class="circuit-pattern"></div>
 
-<h1>Wszystkiego najlepszego z okazji 18 urodzin, Anastazjo!</h1>
+    <!-- Ikony w narożnikach -->
+    <i class="fas fa-industry corner-icon bottom-left"></i>
+    <i class="fas fa-cogs corner-icon bottom-right"></i>
 
-<div id="counter">Zestrzelone balony: 0</div>
+    <!-- Update header structure -->
+    <header class="hero" id="home">
+        <div class="tech-background"></div>
+        <div class="particles"></div>
+        <div class="hero-content">
+            <div class="name-container">
+                <h1 class="glitch" data-text="Jakub Czaplicki">Jakub Czaplicki</h1>
+                <div class="title-bar">
+                    <p class="typewriter">Automatyk | Programista PLC</p>
+                    
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-grid">
+                <a href="mailto:0czaplickijakub0@email.com" class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span class="contact-text">0czaplickijakub0@email.com</span>
+                    <div class="hover-effect"></div>
+                </a>
+                <a href="tel:+ 789 360 511" class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span class="contact-text">+ 789 360 511</span>
+                    <div class="hover-effect"></div>
+                </a>
+                <a href="https://github.com/Kabuko512" class="contact-item">
+                    <i class="fab fa-github"></i>
+                    <span class="contact-text">GitHub</span>
+                    <div class="hover-effect"></div>
+                </a>
+            </div>
+        </div>
+    </header>
 
-<div class="dancer">
-    <div class="dancer-body"></div>
-</div>
+    <div class="container">
+        <!-- Sekcja "O mnie" -->
+        <section id="about" class="section">
+            <h2 class="section-title">O mnie</h2>
+            <p>Od najmłodszych lat fascynowało mnie, jak działają różne urządzenia i mechanizmy. Rozbieranie i składanie zabawek było moją codziennością, a ciekawość świata techniki prowadziła mnie przez kolejne etapy życia. Zawsze wierzyłem, że technologia to nie tylko narzędzie, ale również sztuka, która łączy w sobie kreatywność i precyzję.
 
-<audio id="bg-music" autoplay loop>
-    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_76e0c9e3b6.mp3?filename=happy-birthday-13399.mp3" type="audio/mpeg">
-    Twoja przeglądarka nie obsługuje elementu audio.
-</audio>
+                Obecnie, jako Automatyk Przemysłowy, mam niesamowitą możliwość łączenia mojej pracy z pasją do programowania, innowacji oraz efektywnego zarządzania systemami utrzymania ruchu. Każdego dnia staję przed nowymi wyzwaniami, które motywują mnie do ciągłego rozwoju i poszukiwania najlepszych rozwiązań. Wierzę, że kluczem do sukcesu jest połączenie wiedzy technicznej z otwartością na nowe idee i gotowością do nauki.
+                Moja kariera zawodowa była pełna różnorodnych doświadczeń. Pracując jako Administrator Magazynu Utrzymania Ruchu, Mechanik, Technik, operator, programista CNC czy koordynator działu, zdobyłem wszechstronną wiedzę i umiejętności, które pozwalają mi zrozumieć złożoność procesów przemysłowych. Każde z tych stanowisk i wspaniali ludzie z którymi miałem możliwość wspołpracować nauczyło mnie, jak ważna jest praca zespołowa, komunikacja i dzielenie się wiedzą.
+                Poza pracą poświęcam czas na rozwijanie swoich pasji, takich jak elektronika, robotyka i sztuczna inteligencja. Eksperymentuję z nowymi technologiami, biorę udział w projektach open-source i stale poszerzam swoje horyzonty. Wierzę, że dzielenie się wiedzą i doświadczeniem przyczynia się do postępu całej społeczności.</p>
+        </section>
 
-<script>
-    let balloonCount = 0;
+        <!-- Sekcja "Doświadczenie zawodowe" -->
+        <section id="experience" class="section">
+            <h2 class="section-title">Doświadczenie zawodowe</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>Starszy Automatyk</h3>
+                    <p>Electropoli Poland Sp. z o.o. | 2023 - Obecnie</p>
+                    <ul>
+                        <li>Prowadzenie i nadzór nad projektami automatyzacji procesów produkcyjnych.</li>
+                        <li>Wdrażanie obsługi systemów big data zgodnie z standardami Industry 4.0.</li>
+                        <li>Integracja systemów automatyki z systemami SCADA.</li>
+                        <li>Szkolenie i mentorowanie młodszych inżynierów automatyków.</li>
+                        <li>Zapewnienie zgodności projektów z normami bezpieczeństwa.</li>
+                        <li>Współpraca z działami produkcji i technologii w celu optymalizacji procesów.</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                        <h3>Automatyk Utrzymania Ruchu</h3>
+                        <p>Electropoli Poland Sp. z o.o. | 2019 - 2023</p>
+                        <ul>
+                            <li>Programowanie sterowników PLC Siemens (TIA Portal, Step7)</li>
+                            <li>Projektowanie i optymalizacja interfejsów HMI (WinCC)</li>
+                            <li>Tworzenie skryptów VB do obsługi paneli HMI</li>
+                            <li>Modernizacja systemów raportowania (Excel + VBA + PowerQuery)</li>
+                            <li>Utrzymanie ciągłości pracy linii produkcyjnych</li>
+                            <li>Dokumentacja techniczna i instrukcje stanowiskowe</li>
+                        </ul>
+                    </div>
+                    <div class="timeline-item">
+                        <h3>Koordynator zespołu</h3>
+                        <p>Nord Napędy sp. z o.o. | 2013 - 2016</p>
+                        <ul>
+                            <li>Zarządzanie zespołem operatorów maszyn CNC</li>
+                            <li>Programowanie maszyn sterowanych numerycznie</li>
+                            <li>Nadzór nad procesami jakościowymi</li>
+                            <li>Optymalizacja procesów produkcyjnych</li>
+                        </ul>
+                    </div>
+                    <div class="timeline-item">
+                        <h3>Administrator magazynu UR</h3>
+                        <p>AB World Foods Ltd | 2012 - 2013</p>
+                        <ul>
+                            <li>Zarządzanie magazynem części zamiennych</li>
+                            <li>Wdrażanie systemu CMMS</li>
+                            <li>Optymalizacja stanów magazynowych</li>
+                        </ul>
+                    </div>
+                    <!-- Add new experience -->
+                    <div class="timeline-item">
+                        <h3>Technik Utrzymania Ruchu</h3>
+                        <p>Electropoli Poland Sp. z o.o. | Maj 2019 - Obecnie</p>
+                        <ul>
+                            <li>Wykonywanie nowych projektów optymalizacyjnych oraz wdrożeń systemów mechanicznych i elektrycznych z układami sterowania.</li>
+                            <li>Wykonywanie przeglądów konserwacyjnych, remontów oraz usuwanie awarii i usterek.</li>
+                            <li>Organizowanie planowanych przeglądów i remontów.</li>
+                            <li>Sporządzanie i aktualizowanie dokumentacji technologiczno-ruchowej.</li>
+                            <li>Przeprowadzanie kontroli gotowości do pracy maszyn i linii produkcyjnych.</li>
+                        </ul>
+                    </div>
+                    <div class="timeline-item">
+                        <h3>Kontroler Jakości</h3>
+                        <p>Alumetal SA | Wrzesień 2017 - Maj 2018</p>
+                        <ul>
+                            <li>Przeprowadzanie badań jakościowych w trakcie procesu.</li>
+                            <li>Tworzenie dokumentacji jakościowej oraz certyfikatów dla klientów.</li>
+                            <li>Współtworzenie planów kontroli dla półproduktów i wyrobów gotowych.</li>
+                            <li>Obsługa i analiza składu materiałów z użyciem spektrometru iskrowego.</li>
+                            <li>Bezpośredni kontakt z klientem w celu wyeliminowania problemów jakościowych.</li>
+                        </ul>
+                    </div>
+                    <div class="timeline-item">
+                        <h3>Administrator Magazynu Utrzymania Ruchu</h3>
+                        <p>AB World Foods Ltd | Czerwiec 2012 - Luty 2013</p>
+                        <ul>
+                            <li>Zarządzanie operacjami magazynowymi części zamiennych i materiałów eksploatacyjnych.</li>
+                            <li>Zapewnienie optymalnych stanów magazynowych dla utrzymania ciągłości produkcji.</li>
+                            <li>Efektywne zarządzanie zamówieniami na części zamienne i usługi serwisowe.</li>
+                            <li>Wdrażanie systemu magazynowego CMMS.</li>
+                            <li>Sporządzanie i aktualizacja dokumentacji magazynowej.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
 
-    function createBalloon() {
-        const balloon = document.createElement('div');
-        balloon.classList.add('balloon');
+        <!-- Sekcja "Kluczowe umiejętności" -->
+        <section id="skills" class="section skills">
+            <h2 class="section-title">Kluczowe umiejętności</h2>
+            <div class="grid">
+                <div class="skill-card">
+                    <h3><i class="fas fa-microchip"></i> Programowanie PLC</h3>
+                    <ul>
+                        <li>Siemens TIA Portal</li>
+                        <li>STEP7</li>
+                        <li>CODESYS</li>
+                        <li>Programowanie struktur</li>
+                        <li>Optymalizacja kodu</li>
+                    </ul>
+                </div>
+                <div class="skill-card">
+                    <h3><i class="fas fa-desktop"></i> Wizualizacje</h3>
+                    <ul>
+                        <li>WinCC</li>
+                        <li>Panele HMI Siemens</li>
+                        <li>Beckhoff</li>
+                        <li>Projektowanie UI/UX</li>
+                    </ul>
+                </div>
+                <div class="skill-card">
+                    <h3><i class="fas fa-robot"></i> Automatyka</h3>
+                    <ul>
+                        <li>Diagnostyka</li>
+                        <li>Modernizacje</li>
+                        <li>Integracja systemów</li>
+                        <li>Robotyka (Yaskawa)</li>
+                    </ul>
+                </div>
+                <div class="skill-card">
+                    <h3>Planowanie i Realizacja Planów Konserwacyjnych</h3>
+                </div>
+                <div class="skill-card">
+                    <h3>Rozwiązywanie problemów</h3>
+                </div>
+                <div class="skill-card">
+                    <h3>Efektywna praca pod presją czasu</h3>
+                </div>
+                <div class="skill-card">
+                    <h3>Doświadczenie w kierowaniu zespołem</h3>
+                </div>
+            </div>
+        </section>
 
-        const size = Math.random() * 30 + 40; // Rozmiar od 40 do 70 pikseli
-        const xPosition = Math.random() * (window.innerWidth - size);
-        const duration = Math.random() * 5 + 5; // Od 5 do 10 sekund
+        <!-- Sekcja "Certyfikaty i szkolenia" -->
+        <section id="certificates" class="section">
+            <h2 class="section-title">Certyfikaty i szkolenia</h2>
+            <div class="certificate-grid">
+                <div class="certificate-item">
+                    <h3>Uprawnienia SEP</h3>
+                    <p>G1E, G2E, G3E</p>
+                </div>
+                <div class="certificate-item">
+                    <h3>PROFINET</h3>
+                    <p>Instalacja i Konfiguracja</p>
+                </div>
+                <div class="certificate-item">
+                    <h3>Yaskawa Academy</h>
+                    <p>Programowanie robotów przemysłowych</p>
+                </div>
+                <div class="certificate-item">
+                    <h3>TIA Portal</h>
+                    <p>Poziom zaawansowany</p>
+                </div>
+                <div class="certificate-item">
+                    <h3>S7-STL Programowanie w TIA Portal</h>
+                </div>
+                <div class="certificate-item">
+                    <h3>Szkolenie Wysokościowe</h>
+                    <p>Kurs Alpinista Przemysłowy</p>
+                </div>
+                <div class="certificate-item">
+                    <h3>SEW Motoreduktory</h>
+                    <p>Obsługa i konserwacja wraz z falownikami Movimot</p>
+                </div>
+                <div class="certificate-item">
+                    <h3>VIMS</h>
+                    <p>Obsługa mierników drgań ADASH</p>
+                </div>
+            </div>
+        </section>
 
-        balloon.style.left = xPosition + 'px';
-        balloon.style.animationDuration = duration + 's, ' + (Math.random() * 2 + 2) + 's';
-        balloon.style.width = size + 'px';
-        balloon.style.height = size * 1.4 + 'px'; // Zachowanie proporcji balonu
-        balloon.style.borderRadius = '50% 50% 50% 50% / 60% 60% 40% 40%';
-        balloon.style.backgroundColor = getRandomColor();
+        <!-- Sekcja "Edukacja" -->
+        <section id="education" class="section">
+            <h2 class="section-title">Edukacja</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>Zespół Szkół Ponadgimnazjalnych nr 1 "Elektryk"</h3>
+                    <p>Specjalizacja: Technik Mechatronik</p>
+                    <p>Poziom wykształcenia: Średnie</p>
+                </div>
+            </div>
+        </section>
 
-        // Dostosowanie pozycji ogonka
-        const tail = document.createElement('div');
-        tail.style.position = 'absolute';
-        tail.style.left = '50%';
-        tail.style.top = -20 + 'px'; // Zmiana z bottom na top
-        tail.style.width = '2px';
-        tail.style.height = '20px';
-        tail.style.backgroundColor = '#555';
-        tail.style.transform = 'translateX(-50%)';
-        balloon.appendChild(tail);
+        <!-- Sekcja "Języki" -->
+        <section id="languages" class="section">
+            <h2 class="section-title">Języki</h2>
+            <div class="grid">
+                <div class="skill-card">
+                    <h3>Angielski</h3>
+                    <p>Poziom C2+</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Niemiecki</h3>
+                    <p>Poziom podstawowy</p>
+                </div>
+            </div>
+        </section>
+    </div>
 
-        balloon.addEventListener('click', function() {
-            popBalloon(balloon);
+    <!-- Skrypt JavaScript -->
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.utils.toArray('.section').forEach(function(section) {
+        gsap.from(section, {
+            scrollTrigger: {
+                trigger: section,
+                start: "top 60%",
+                toggleActions: "play none none none"
+            },
+            opacity: 0,
+            y: 50,
+            duration: 2,
+            ease: "power2.out"
+        });
+    });
+        // Logika śledzenia kursora przez robota
+        const robot = document.querySelector('.following-robot');
+        let mouseX = 0;
+        let mouseY = 0;
+        let robotX = 0;
+        let robotY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
         });
 
-        balloon.addEventListener('touchstart', function() {
-            popBalloon(balloon);
+        function animate() {
+            robotX += (mouseX - robotX) * 0.1;
+            robotY += (mouseY - robotY) * 0.1;
+            robot.style.transform = `translate(${robotX}px, ${robotY}px)`;
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Efekt PLC bits
+        function createPLCBits() {
+            const terms = [
+                'SIEMENS S7-1500', 'TIA Portal v17', 'STEP 7', 'WinCC', 'PLC',
+                'KUKA KR C4', 'KUKA.PLC mxA', 'KUKA.HMI', 'WorkVisual',
+                'BECKHOFF TwinCAT', 'EtherCAT', 'CX5130', 'CP6606',
+                'Digital Input', 'Digital Output', 'Analog Input', 'Analog Output',
+                'PROFINET', 'PROFIBUS', 'Industrial Ethernet',
+                'I0.0', 'I0.1', 'I0.2', 'Q0.0', 'Q0.1', 'Q0.2', 'DB1', 'FC1', 'FB1',
+                'Safety PLC', 'Distributed I/O', 'HMI Panel'
+            ];
+
+            setInterval(() => {
+                const bits = document.createElement('div');
+                bits.className = 'plc-bits';
+                bits.style.left = Math.random() * window.innerWidth + 'px';
+                bits.style.top = Math.random() * window.innerHeight + 'px';
+                bits.textContent = terms[Math.floor(Math.random() * terms.length)];
+                bits.style.animation = 'blink 1s ease-in-out';
+                document.body.appendChild(bits);
+
+                // Usuwanie elementu po animacji
+                setTimeout(() => bits.remove(), 2000);
+            }, 300);
+        }
+
+        createPLCBits();
+
+        // Funkcjonalność przełącznika motywu
+        const themeToggle = document.querySelector('.theme-toggle');
+        const root = document.documentElement;
+        const icon = themeToggle.querySelector('i');
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = root.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            root.setAttribute('data-theme', newTheme);
+            icon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+            localStorage.setItem('theme', newTheme);
         });
 
-        document.body.appendChild(balloon);
+        // Sprawdzenie zapisanej preferencji motywu
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            root.setAttribute('data-theme', savedTheme);
+            icon.className = savedTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        }
 
-        // Usunięcie balonu po animacji
-        balloon.addEventListener('animationend', function() {
-            balloon.remove();
+        // Sekwencja ładowania
+        document.addEventListener('DOMContentLoaded', () => {
+            const biosText = document.getElementById('bios-text');
+            const loader = document.querySelector('.loader-container');
+            let isLoadingComplete = false;
+
+            const skills = [
+                "Programowanie PLC",
+                "Systemy SCADA",
+                "Automatyka przemysłowa",
+                "Sieci przemysłowe",
+                "Język C++",
+                "Język Python",
+                "TIA Portal",
+                "TwinCat 3",
+                "Projektowanie układów sterowania",
+                "Diagnostyka systemów automatyki",
+            ];
+
+            const bootSequence = [
+                "Inicjalizacja systemu...",
+                "Wykryto procesor: Human Brain v1.0",
+                "Ładowanie lat doświadczenia...",
+                "Inicjalizacja profilu zawodowego...",
+                `Ładowanie CV: Jakub Czaplicki`,
+                "Weryfikacja umiejętności...",
+                "",
+                "SKANOWANIE UMIEJĘTNOŚCI:",
+                "===================="
+            ];
+
+            function addLine(text, delay = 100, isFinalMessage = false) {
+                return new Promise(resolve => {
+                    if (!biosText) return resolve();
+                    const line = document.createElement('div');
+                    line.className = 'bios-line';
+                    if (isFinalMessage) {
+                        line.classList.add('final-message');
+                    }
+                    biosText.appendChild(line);
+                    
+                    let i = 0;
+                    const interval = setInterval(() => {
+                        if (i < text.length) {
+                            line.textContent += text[i];
+                            i++;
+                        } else {
+                            clearInterval(interval);
+                            resolve();
+                        }
+                    }, 1);
+                });
+            }
+
+            function hideLoader() {
+                if (!loader || isLoadingComplete) return;
+                isLoadingComplete = true;
+                
+                loader.style.opacity = '0';
+                loader.style.transition = 'opacity 0.5s ease';
+                setTimeout(() => {
+                    if (loader) loader.style.display = 'none';
+                }, 500);
+            }
+
+            async function typeSequence() {
+                try {
+                    for (const line of bootSequence) {
+                        await addLine(line);
+                        await new Promise(resolve => setTimeout(resolve, 300));
+                    }
+
+                    for (const skill of skills) {
+                        await addLine(`[OK] ${skill}`);
+                        await new Promise(resolve => setTimeout(resolve, 200));
+                    }
+
+                    await addLine("");
+                    await addLine("====================");
+                    await addLine("Załadowano pomyślnie!", 100, true);
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+
+                    hideLoader();
+                } catch (error) {
+                    console.error('Error during loading sequence:', error);
+                    hideLoader();
+                }
+            }
+
+            // Rozpoczęcie sekwencji ładowania
+            typeSequence();
         });
-    }
 
-    function popBalloon(balloon) {
-        // Pozycja balonu
-        const rect = balloon.getBoundingClientRect();
+        // Add this JavaScript to handle active section highlighting
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section');
+            const tocLinks = document.querySelectorAll('.table-of-contents a');
+            
+            const observerOptions = {
+                threshold: 0.5,
+                rootMargin: "-50% 0px -50% 0px"
+            };
 
-        // Tworzenie eksplozji
-        const explosion = document.createElement('div');
-        explosion.classList.add('explosion');
-        explosion.style.left = rect.left + 'px';
-        explosion.style.top = rect.top + 'px';
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Remove active class from all links
+                        tocLinks.forEach(link => link.classList.remove('active'));
+                        // Add active class to current section link
+                        const activeLink = document.querySelector(`.table-of-contents a[href="#${entry.target.id}"]`);
+                        if (activeLink) activeLink.classList.add('active');
+                    }
+                });
+            }, observerOptions);
 
-        document.body.appendChild(explosion);
-
-        explosion.addEventListener('animationend', function() {
-            explosion.remove();
+            sections.forEach(section => observer.observe(section));
         });
-
-        // Usuwanie balonu
-        balloon.remove();
-
-        // Aktualizacja licznika
-        balloonCount++;
-        document.getElementById('counter').innerText = 'Zestrzelone balony: ' + balloonCount;
-    }
-
-    function getRandomColor() {
-        const colors = ['#ff69b4', '#ff6347', '#ffa500', '#9acd32', '#1e90ff', '#9370db'];
-        return colors[Math.floor(Math.random() * colors.length)];
-    }
-
-    setInterval(createBalloon, 1000);
-</script>
-
+    </script>
 </body>
 </html>
