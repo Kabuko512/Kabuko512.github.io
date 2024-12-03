@@ -628,6 +628,42 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
         }
+
+        /* Add these styles to your CSS section */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #0f2;
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            z-index: 10;
+            text-shadow: 
+                0 0 5px #0f2,
+                0 0 10px #0f2;
+        }
+
+        .scroll-indicator:hover {
+            color: #fff;
+            text-shadow: 
+                0 0 5px #fff,
+                0 0 10px #0f2,
+                0 0 20px #0f2;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-15px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-7px);
+            }
+        }
     </style>
 </head>
 <body>
@@ -685,6 +721,9 @@
                     </a>
                 </div>
             </div>
+        </div>
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
         </div>
     </header>
 
