@@ -7,7 +7,7 @@
     <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         /* Resetowanie stylów */
         * {
@@ -22,9 +22,7 @@
             --secondary: #1e293b;
             --accent: #60a5fa;
             --accent-rgb: 96, 165, 250;
-            --accent-transparent: rgba(var(--accent-rgb), 0.1);
             --text: #e2e8f0;
-            --primary-rgb: 15, 23, 42;
             --bg: #1a202c;
             --card-bg: var(--secondary);
             --card-hover: #2d3748;
@@ -37,9 +35,7 @@
             --secondary: #e2e8f0;
             --accent: #2563eb;
             --accent-rgb: 37, 99, 235;
-            --accent-transparent: rgba(var(--accent-rgb), 0.1);
             --text: #1e293b;
-            --primary-rgb: 248, 250, 252;
             --bg: #f0f2f5;
             --card-bg: var(--secondary);
             --card-hover: #d9d9d9;
@@ -53,6 +49,59 @@
             color: var(--text);
             line-height: 1.6;
             transition: background-color 0.3s ease, color 0.3s ease;
+            background: #0a1a1f;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* PCB pattern background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, transparent 95%, #1e4d3a 95%),
+                linear-gradient(transparent 95%, #1e4d3a 95%);
+            background-size: 20px 20px;
+            opacity: 0.3;
+            z-index: -2;
+        }
+
+        /* Flowing circuits animation */
+        .circuit-line {
+            position: fixed;
+            background: linear-gradient(90deg, transparent, #00ff9d, transparent);
+            height: 2px;
+            width: 100%;
+            opacity: 0;
+            z-index: -1;
+            animation: flow 3s infinite;
+        }
+
+        /* Floating text elements */
+        .floating-text {
+            position: fixed;
+            color: rgba(0, 255, 157, 0.3);
+            font-family: 'Courier New', monospace;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes flow {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateX(100%);
+                opacity: 0;
+            }
         }
 
         .container {
@@ -68,31 +117,52 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--primary-dark);
+            background: var(--primary);
+            text-align: center;
+            padding: 0 20px;
+            background: #0a1a1f;
         }
 
-        .tech-background {
+        .hero::before {
+            content: '';
             position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
+            animation: gradientBG 15s ease infinite;
+            opacity: 0.9;
+            z-index: -1;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
             background: 
-                linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.3)),
-                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,255,0.1) 3px, transparent 3px),
-                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,255,255,0.1) 3px, transparent 3px);
-            animation: gridMove 0s linear infinite;
+                linear-gradient(90deg, transparent 49%, #0f2 1%, transparent 51%) 0 0 / 50px 50px,
+                linear-gradient(0deg, transparent 49%, #0f2 1%, transparent 51%) 0 0 / 50px 50px;
+            opacity: 0.1;
+            animation: circuitMove 20s linear infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(0,255,0,0.1) 0%, transparent 70%);
+            animation: glow 4s ease-in-out infinite;
         }
 
         .hero-content {
             position: relative;
             z-index: 2;
             padding: 2rem;
-            background: rgba(0,0,0,0.7);
-            border: 1px solid rgba(0,255,255,0.2);
             border-radius: 10px;
-            box-shadow: 0 0 30px rgba(0,255,255,0.1);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 20, 20, 0.7);
+            border: 1px solid #0f2;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+            backdrop-filter: blur(5px);
         }
 
         .name-container {
@@ -104,113 +174,110 @@
             color: #fff;
             text-shadow: 0 0 10px rgba(0,255,255,0.5);
             position: relative;
-            animation: glitchText 3s infinite;
+            animation: glitchText 10s infinite;
+            color: #0f2;
+            text-shadow: 
+                0 0 2px #0f2,
+                0 0 5px #0f2,
+                0 0 10px #0f2;
+            font-family: 'Share Tech Mono', monospace;
         }
+/* Binary rain effect */
+.binary-rain {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
 
+.binary-drop {
+    position: absolute;
+    color: #0f2;
+    font-family: monospace;
+    font-size: 14px;
+    opacity: 0;
+    animation: rain 10s linear infinite;
+}
+
+/* PLC status indicators */
+.plc-status {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.status-led {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #0f2;
+    animation: blink 1s infinite;
+}
+
+.status-led:nth-child(2) { animation-delay: 0.2s; }
+.status-led:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes circuitMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 50px 50px; }
+}
+
+@keyframes glow {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 0.8; }
+}
+
+@keyframes rain {
+    0% {
+        transform: translateY(-100%);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
         .title-bar {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            justify-content: center;
             margin-top: 1rem;
             padding: 0.5rem;
-            background: rgba(0,255,255,0.1);
-            border-radius: 5px;
         }
 
         .typewriter {
-            color: #0ff;
-            border-right: 2px solid #0ff;
-            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-
-        .tech-dots {
-            display: flex;
-            gap: 0.2rem;
-        }
-
-        .tech-dots span {
-            width: 4px;
-            height: 4px;
-            background: #0ff;
-            border-radius: 50%;
-            animation: pulse 1.5s infinite;
-        }
-
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-        }
-
-        .contact-item {
-            position: relative;
-            padding: 1rem;
-            background: rgba(0,255,255,0.05);
-            border: 1px solid rgba(0,255,255,0.1);
-            border-radius: 5px;
-            transition: all 0.3s ease;
-            overflow: hidden;
-        }
-
-        .contact-item:hover {
-            background: rgba(0,255,255,0.1);
-            transform: translateY(-2px);
-        }
-
-        .hover-effect {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(0,255,255,0.1), transparent);
-            transform: translateX(-100%);
-        }
-
-        .contact-item:hover .hover-effect {
-            transform: translateX(100%);
-            transition: transform 0.5s ease;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
-            animation: gradientBG 15s ease infinite;
-            opacity: 0.9;
-        }
-
-        .hero-icon {
-            position: absolute;
-            font-size: 500px;
-            color: var(--accent-transparent);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1;
-        }
-
-        .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            animation: fadeInUp 1s ease-out;
-        }
-
-        .hero p {
-            font-size: 1.5rem;
             color: var(--accent);
-            margin-bottom: 2rem;
+            font-size: 1.5rem;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid var(--accent);
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
         }
 
-        .contact-info {
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--accent); }
+        }
+
+        .contact-stack {
             display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            align-items: center;
         }
 
         .contact-item {
@@ -218,19 +285,22 @@
             align-items: center;
             gap: 0.5rem;
             padding: 0.5rem 1rem;
+            position: relative;
+            transition: transform 0.2s;
+            color: var(--text);
+            text-decoration: none;
             background: var(--overlay-bg);
             border-radius: 2rem;
-            transition: all 0.3s ease;
         }
 
         .contact-item:hover {
-            background: var(--overlay-bg-hover);
             transform: translateY(-2px);
+            background: var(--overlay-bg-hover);
         }
 
         .contact-item i {
-            margin-right: 0.5rem;
             color: var(--accent);
+            font-size: 1.2rem;
         }
 
         .section {
@@ -243,6 +313,7 @@
             color: var(--accent);
             position: relative;
             padding-left: 1rem;
+            width: 50%;
         }
 
         .section-title::before {
@@ -288,7 +359,9 @@
         .timeline-item ul {
             list-style: none;
             padding: 0;
-            text-align: center;
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .timeline-item li {
@@ -322,24 +395,8 @@
             opacity: 1;
         }
 
-        .skill-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--accent);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
         .skill-card:hover {
             transform: translateY(-5px);
-        }
-
-        .skill-card:hover::before {
-            transform: scaleX(1);
         }
 
         .certificate-grid {
@@ -354,6 +411,7 @@
             border-radius: 0.5rem;
             transition: all 0.3s ease;
             opacity: 1;
+            text-align: center;
         }
 
         .certificate-item:hover {
@@ -383,129 +441,22 @@
             100% { background-position: 0% 50%; }
         }
 
-        @keyframes circuitMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 50px 50px; }
-        }
-
-        @keyframes rotateBot {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.2; }
-            50% { transform: scale(1.2); opacity: 0.3; }
-            100% { transform: scale(1); opacity: 0.2; }
+        @keyframes glitchText {
+            0% { transform: translate(0); }
+            20% { transform: translate(0px, 0px); }
+            40% { transform: translate(0px, 0px); }
+            60% { transform: translate(0px, 0px); }
+            80% { transform: translate(0px, 0px); }
+            100% { transform: translate(0); }
         }
 
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2.5rem;
             }
-            .contact-info {
-                flex-direction: column;
-            }
             .timeline-item {
                 margin-left: 1rem;
             }
-        }
-
-        .hero-image {
-            width: 100%;
-            max-width: 600px;
-            height: auto;
-            margin-top: 2rem;
-        }
-
-        .skill-card h3 i {
-            margin-right: 0.5rem;
-            color: var(--accent);
-        }
-
-        /* Animacja obwodów */
-        .circuit-pattern {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            opacity: 0.1;
-            z-index: 0;
-            background: 
-                linear-gradient(90deg, var(--secondary) 2px, transparent 2px) 0 0,
-                linear-gradient(0deg, var(--secondary) 2px, transparent 2px) 0 0;
-            background-size: 50px 50px;
-            animation: circuitMove 20s linear infinite;
-        }
-
-        /* Ikony w narożnikach */
-        .corner-icon {
-            position: fixed;
-            font-size: 3rem;
-            color: var(--accent);
-            opacity: 0.2;
-            z-index: 1;
-        }
-
-        .corner-icon.bottom-left {
-            bottom: 20px;
-            left: 20px;
-            animation: pulse 3s ease-in-out infinite;
-        }
-
-        .corner-icon.bottom-right {
-            bottom: 20px;
-            right: 20px;
-            animation: rotateBot 8s linear infinite reverse;
-        }
-
-        /* Styl robota śledzącego kursor */
-        .following-robot {
-            position: fixed;
-            font-size: 4rem;
-            color: var(--accent);
-            opacity: 0.2;
-            pointer-events: none;
-            transition: all 0.3s ease-out;
-            z-index: 0;
-        }
-
-        /* Efekt PLC bits */
-        .plc-bits {
-            position: fixed;
-            pointer-events: none;
-            font-family: monospace;
-            color: var(--accent);
-            opacity: 0.15;
-            font-size: 18px;
-            z-index: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .plc-bits:hover {
-            opacity: 0.3;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 0.15; }
-            50% { opacity: 0.4; }
-        }
-
-        .skill-card:hover::before {
-            background: linear-gradient(90deg, 
-                var(--accent) 0%, 
-                #4f46e5 50%, 
-                var(--accent) 100%
-            );
-            background-size: 200% 100%;
-            animation: moveGradient 2s linear infinite;
-        }
-
-        @keyframes moveGradient {
-            0% { background-position: 100% 0%; }
-            100% { background-position: -100% 0%; }
         }
 
         /* Przycisk zmiany motywu */
@@ -569,7 +520,7 @@
             animation: blink 1s infinite;
         }
 
-        @keyframes cursor-blink {
+        @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
@@ -578,12 +529,17 @@
             display: inline-block;
             width: 8px;
             height: 15px;
-            background: #0f0;
+            background: var(--accent);
             margin-left: 5px;
             animation: cursor-blink 1s infinite;
         }
 
-        /* Add this to your CSS */
+        @keyframes cursor-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Spis treści */
         .table-of-contents {
             position: fixed;
             right: 2rem;
@@ -629,10 +585,12 @@
             transition: all 0.3s ease;
         }
 
-        .table-of-contents a:hover {
+        .table-of-contents a:hover,
+        .table-of-contents a.active {
             color: #00ff00;
             background: rgba(0, 255, 0, 0.1);
             border-radius: 4px;
+            border-left: 3px solid #00ff00;
         }
 
         .table-of-contents i {
@@ -645,94 +603,35 @@
             }
         }
 
-        /* Add these styles for active state */
-        .table-of-contents a.active {
-            color: #00ff00;
-            background: rgba(0, 255, 0, 0.1);
-            border-radius: 4px;
-            border-left: 3px solid #00ff00;
+        @keyframes circuitMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
         }
 
-        @keyframes gridMove {
-            from { background-position: 0 0; }
-            to { background-position: 50px 50px; }
+        @keyframes glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
         }
 
-        @keyframes glitchText {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-            100% { transform: translate(0); }
+        @keyframes rain {
+            0% {
+                transform: translateY(-100%);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
         }
 
-        @keyframes pulse {
-            0% { opacity: 0.5; }
-            50% { opacity: 1; }
-            100% { opacity: 0.5; }
-        }
-
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: #0ff; }
-        }
-
-        /* Add these media queries to your existing CSS */
-
-        @media screen and (max-width: 768px) {
-            header {
-                padding: 1rem;
-            }
-
-            .logo {
-                font-size: 1.2rem;
-            }
-
-            nav {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .nav-links {
-                flex-direction: column;
-                align-items: center;
-                gap: 1rem;
-            }
-
-            .nav-links li {
-                margin: 0;
-            }
-
-            .theme-toggle {
-                margin-top: 1rem;
-            }
-
-            /* Optional: Add hamburger menu for mobile */
-            .mobile-menu-btn {
-                display: block;
-                position: absolute;
-                right: 1rem;
-                top: 1rem;
-            }
-
-            .nav-links {
-                display: none; /* Hide by default on mobile */
-            }
-
-            .nav-links.active {
-                display: flex; /* Show when active class is added */
-            }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
     </style>
 </head>
 <body>
-    <!-- Update TOC structure -->
+    <!-- Spis treści -->
     <nav class="table-of-contents">
         <div class="toc-header">
             <i class="fas fa-list"></i>
@@ -746,54 +645,45 @@
             <li><a href="#education"><i class="fas fa-graduation-cap"></i> Edukacja</a></li>
         </ul>
     </nav>
+
     <div class="loader-container">
         <div class="bios-screen">
             <div id="bios-text"></div>
         </div>
     </div>
+
     <button class="theme-toggle" aria-label="Toggle theme">
         <i class="fas fa-sun"></i>
     </button>
-    <i class="fas fa-robot following-robot"></i>
-    <!-- Wzór obwodów -->
-    <div class="circuit-pattern"></div>
 
-    <!-- Ikony w narożnikach -->
-    <i class="fas fa-industry corner-icon bottom-left"></i>
-    <i class="fas fa-cogs corner-icon bottom-right"></i>
-
-    <!-- Update header structure -->
+    <!-- Nagłówek -->
     <header class="hero" id="home">
-        <div class="tech-background"></div>
-        <div class="particles"></div>
+        <div class="binary-rain" id="binaryRain"></div>
         <div class="hero-content">
             <div class="name-container">
                 <h1 class="glitch" data-text="Jakub Czaplicki">Jakub Czaplicki</h1>
                 <div class="title-bar">
                     <p class="typewriter">Automatyk | Programista PLC</p>
-                    
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
                 </div>
-            </div>
-            <div class="contact-grid">
-                <a href="mailto:0czaplickijakub0@email.com" class="contact-item">
-                    <i class="fas fa-envelope"></i>
-                    <span class="contact-text">0czaplickijakub0@email.com</span>
-                    <div class="hover-effect"></div>
-                </a>
-                <a href="tel:+ 789 360 511" class="contact-item">
-                    <i class="fas fa-phone"></i>
-                    <span class="contact-text">+ 789 360 511</span>
-                    <div class="hover-effect"></div>
-                </a>
-                <a href="https://github.com/Kabuko512" class="contact-item">
-                    <i class="fab fa-github"></i>
-                    <span class="contact-text">GitHub</span>
-                    <div class="hover-effect"></div>
-                </a>
+                <div class="plc-status">
+                    <div class="status-led"></div>
+                    <div class="status-led"></div>
+                    <div class="status-led"></div>
+                </div>
+                <div class="contact-stack">
+                    <a href="mailto:0czaplickijakub0@email.com" class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span class="contact-text">0czaplickijakub0@email.com</span>
+                    </a>
+                    <a href="tel:+789360511" class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span class="contact-text">+48 789 360 511</span>
+                    </a>
+                    <a href="https://github.com/Kabuko512" class="contact-item">
+                        <i class="fab fa-github"></i>
+                        <span class="contact-text">GitHub</span>
+                    </a>
+                </div>
             </div>
         </div>
     </header>
@@ -802,11 +692,10 @@
         <!-- Sekcja "O mnie" -->
         <section id="about" class="section">
             <h2 class="section-title">O mnie</h2>
-            <p>Od najmłodszych lat fascynowało mnie, jak działają różne urządzenia i mechanizmy. Rozbieranie i składanie zabawek było moją codziennością, a ciekawość świata techniki prowadziła mnie przez kolejne etapy życia. Zawsze wierzyłem, że technologia to nie tylko narzędzie, ale również sztuka, która łączy w sobie kreatywność i precyzję.
-
-                Obecnie, jako Automatyk Przemysłowy, mam niesamowitą możliwość łączenia mojej pracy z pasją do programowania, innowacji oraz efektywnego zarządzania systemami utrzymania ruchu. Każdego dnia staję przed nowymi wyzwaniami, które motywują mnie do ciągłego rozwoju i poszukiwania najlepszych rozwiązań. Wierzę, że kluczem do sukcesu jest połączenie wiedzy technicznej z otwartością na nowe idee i gotowością do nauki.
-                Moja kariera zawodowa była pełna różnorodnych doświadczeń. Pracując jako Administrator Magazynu Utrzymania Ruchu, Mechanik, Technik, operator, programista CNC czy koordynator działu, zdobyłem wszechstronną wiedzę i umiejętności, które pozwalają mi zrozumieć złożoność procesów przemysłowych. Każde z tych stanowisk i wspaniali ludzie z którymi miałem możliwość wspołpracować nauczyło mnie, jak ważna jest praca zespołowa, komunikacja i dzielenie się wiedzą.
-                Poza pracą poświęcam czas na rozwijanie swoich pasji, takich jak elektronika, robotyka i sztuczna inteligencja. Eksperymentuję z nowymi technologiami, biorę udział w projektach open-source i stale poszerzam swoje horyzonty. Wierzę, że dzielenie się wiedzą i doświadczeniem przyczynia się do postępu całej społeczności.</p>
+            <p>Od najmłodszych lat fascynowało mnie, jak działają różne urządzenia i mechanizmy. Rozbieranie i składanie zabawek było moją codziennością, a ciekawość świata techniki prowadziła mnie przez kolejne etapy życia. Zawsze wierzyłem, że technologia to nie tylko narzędzie, ale również sztuka, która łączy w sobie kreatywność i precyzję.</p>
+            <p>Obecnie, jako Automatyk Przemysłowy, mam niesamowitą możliwość łączenia mojej pracy z pasją do programowania, innowacji oraz efektywnego zarządzania systemami utrzymania ruchu. Każdego dnia staję przed nowymi wyzwaniami, które motywują mnie do ciągłego rozwoju i poszukiwania najlepszych rozwiązań. Wierzę, że kluczem do sukcesu jest połączenie wiedzy technicznej z otwartością na nowe idee i gotowością do nauki.</p>
+            <p>Moja kariera zawodowa była pełna różnorodnych doświadczeń. Pracując jako Administrator Magazynu Utrzymania Ruchu, Mechanik, Technik, operator, programista CNC czy koordynator działu, zdobyłem wszechstronną wiedzę i umiejętności, które pozwalają mi zrozumieć złożoność procesów przemysłowych. Każde z tych stanowisk i wspaniali ludzie z którymi miałem możliwość współpracować nauczyło mnie, jak ważna jest praca zespołowa, komunikacja i dzielenie się wiedzą.</p>
+            <p>Poza pracą poświęcam czas na rozwijanie swoich pasji, takich jak elektronika, robotyka i sztuczna inteligencja. Eksperymentuję z nowymi technologiami, biorę udział w projektach open-source i stale poszerzam swoje horyzonty. Wierzę, że dzielenie się wiedzą i doświadczeniem przyczynia się do postępu całej społeczności.</p>
         </section>
 
         <!-- Sekcja "Doświadczenie zawodowe" -->
@@ -826,72 +715,38 @@
                     </ul>
                 </div>
                 <div class="timeline-item">
-                        <h3>Automatyk Utrzymania Ruchu</h3>
-                        <p>Electropoli Poland Sp. z o.o. | 2019 - 2023</p>
-                        <ul>
-                            <li>Programowanie sterowników PLC Siemens (TIA Portal, Step7)</li>
-                            <li>Projektowanie i optymalizacja interfejsów HMI (WinCC)</li>
-                            <li>Tworzenie skryptów VB do obsługi paneli HMI</li>
-                            <li>Modernizacja systemów raportowania (Excel + VBA + PowerQuery)</li>
-                            <li>Utrzymanie ciągłości pracy linii produkcyjnych</li>
-                            <li>Dokumentacja techniczna i instrukcje stanowiskowe</li>
-                        </ul>
-                    </div>
-                    <div class="timeline-item">
-                        <h3>Koordynator zespołu</h3>
-                        <p>Nord Napędy sp. z o.o. | 2013 - 2016</p>
-                        <ul>
-                            <li>Zarządzanie zespołem operatorów maszyn CNC</li>
-                            <li>Programowanie maszyn sterowanych numerycznie</li>
-                            <li>Nadzór nad procesami jakościowymi</li>
-                            <li>Optymalizacja procesów produkcyjnych</li>
-                        </ul>
-                    </div>
-                    <div class="timeline-item">
-                        <h3>Administrator magazynu UR</h3>
-                        <p>AB World Foods Ltd | 2012 - 2013</p>
-                        <ul>
-                            <li>Zarządzanie magazynem części zamiennych</li>
-                            <li>Wdrażanie systemu CMMS</li>
-                            <li>Optymalizacja stanów magazynowych</li>
-                        </ul>
-                    </div>
-                    <!-- Add new experience -->
-                    <div class="timeline-item">
-                        <h3>Technik Utrzymania Ruchu</h3>
-                        <p>Electropoli Poland Sp. z o.o. | Maj 2019 - Obecnie</p>
-                        <ul>
-                            <li>Wykonywanie nowych projektów optymalizacyjnych oraz wdrożeń systemów mechanicznych i elektrycznych z układami sterowania.</li>
-                            <li>Wykonywanie przeglądów konserwacyjnych, remontów oraz usuwanie awarii i usterek.</li>
-                            <li>Organizowanie planowanych przeglądów i remontów.</li>
-                            <li>Sporządzanie i aktualizowanie dokumentacji technologiczno-ruchowej.</li>
-                            <li>Przeprowadzanie kontroli gotowości do pracy maszyn i linii produkcyjnych.</li>
-                        </ul>
-                    </div>
-                    <div class="timeline-item">
-                        <h3>Kontroler Jakości</h3>
-                        <p>Alumetal SA | Wrzesień 2017 - Maj 2018</p>
-                        <ul>
-                            <li>Przeprowadzanie badań jakościowych w trakcie procesu.</li>
-                            <li>Tworzenie dokumentacji jakościowej oraz certyfikatów dla klientów.</li>
-                            <li>Współtworzenie planów kontroli dla półproduktów i wyrobów gotowych.</li>
-                            <li>Obsługa i analiza składu materiałów z użyciem spektrometru iskrowego.</li>
-                            <li>Bezpośredni kontakt z klientem w celu wyeliminowania problemów jakościowych.</li>
-                        </ul>
-                    </div>
-                    <div class="timeline-item">
-                        <h3>Administrator Magazynu Utrzymania Ruchu</h3>
-                        <p>AB World Foods Ltd | Czerwiec 2012 - Luty 2013</p>
-                        <ul>
-                            <li>Zarządzanie operacjami magazynowymi części zamiennych i materiałów eksploatacyjnych.</li>
-                            <li>Zapewnienie optymalnych stanów magazynowych dla utrzymania ciągłości produkcji.</li>
-                            <li>Efektywne zarządzanie zamówieniami na części zamienne i usługi serwisowe.</li>
-                            <li>Wdrażanie systemu magazynowego CMMS.</li>
-                            <li>Sporządzanie i aktualizacja dokumentacji magazynowej.</li>
-                        </ul>
-                    </div>
+                    <h3>Automatyk Utrzymania Ruchu</h3>
+                    <p>Electropoli Poland Sp. z o.o. | 2019 - 2023</p>
+                    <ul>
+                        <li>Programowanie sterowników PLC Siemens (TIA Portal, Step7)</li>
+                        <li>Projektowanie i optymalizacja interfejsów HMI (WinCC)</li>
+                        <li>Tworzenie skryptów VB do obsługi paneli HMI</li>
+                        <li>Modernizacja systemów raportowania (Excel + VBA + PowerQuery)</li>
+                        <li>Utrzymanie ciągłości pracy linii produkcyjnych</li>
+                        <li>Dokumentacja techniczna i instrukcje stanowiskowe</li>
+                    </ul>
                 </div>
-            </section>
+                <div class="timeline-item">
+                    <h3>Koordynator zespołu</h3>
+                    <p>Nord Napędy sp. z o.o. | 2013 - 2016</p>
+                    <ul>
+                        <li>Zarządzanie zespołem operatorów maszyn CNC</li>
+                        <li>Programowanie maszyn sterowanych numerycznie</li>
+                        <li>Nadzór nad procesami jakościowymi</li>
+                        <li>Optymalizacja procesów produkcyjnych</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <h3>Administrator magazynu UR</h3>
+                    <p>AB World Foods Ltd | 2012 - 2013</p>
+                    <ul>
+                        <li>Zarządzanie magazynem części zamiennych</li>
+                        <li>Wdrażanie systemu CMMS</li>
+                        <li>Optymalizacja stanów magazynowych</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
         <!-- Sekcja "Kluczowe umiejętności" -->
         <section id="skills" class="section skills">
@@ -953,26 +808,26 @@
                     <p>Instalacja i Konfiguracja</p>
                 </div>
                 <div class="certificate-item">
-                    <h3>Yaskawa Academy</h>
+                    <h3>Yaskawa Academy</h3>
                     <p>Programowanie robotów przemysłowych</p>
                 </div>
                 <div class="certificate-item">
-                    <h3>TIA Portal</h>
+                    <h3>TIA Portal</h3>
                     <p>Poziom zaawansowany</p>
                 </div>
                 <div class="certificate-item">
-                    <h3>S7-STL Programowanie w TIA Portal</h>
+                    <h3>S7-STL Programowanie w TIA Portal</h3>
                 </div>
                 <div class="certificate-item">
-                    <h3>Szkolenie Wysokościowe</h>
+                    <h3>Szkolenie Wysokościowe</h3>
                     <p>Kurs Alpinista Przemysłowy</p>
                 </div>
                 <div class="certificate-item">
-                    <h3>SEW Motoreduktory</h>
+                    <h3>SEW Motoreduktory</h3>
                     <p>Obsługa i konserwacja wraz z falownikami Movimot</p>
                 </div>
                 <div class="certificate-item">
-                    <h3>VIMS</h>
+                    <h3>VIMS</h3>
                     <p>Obsługa mierników drgań ADASH</p>
                 </div>
             </div>
@@ -1008,68 +863,22 @@
 
     <!-- Skrypt JavaScript -->
     <script>
+        // Rejestracja GSAP ScrollTrigger
         gsap.registerPlugin(ScrollTrigger);
+
+        // Animacje sekcji przy przewijaniu
         gsap.utils.toArray('.section').forEach(function(section) {
-        gsap.from(section, {
-            scrollTrigger: {
-                trigger: section,
-                start: "top 60%",
-                toggleActions: "play none none none"
-            },
-            opacity: 0,
-            y: 50,
-            duration: 2,
-            ease: "power2.out"
+            gsap.from(section, {
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 80%",
+                    toggleActions: "play none none none"
+                }
+            });
         });
-    });
-        // Logika śledzenia kursora przez robota
-        const robot = document.querySelector('.following-robot');
-        let mouseX = 0;
-        let mouseY = 0;
-        let robotX = 0;
-        let robotY = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-
-        function animate() {
-            robotX += (mouseX - robotX) * 0.1;
-            robotY += (mouseY - robotY) * 0.1;
-            robot.style.transform = `translate(${robotX}px, ${robotY}px)`;
-            requestAnimationFrame(animate);
-        }
-
-        animate();
-
-        // Efekt PLC bits
-        function createPLCBits() {
-            const terms = [
-                'SIEMENS S7-1500', 'TIA Portal v17', 'STEP 7', 'WinCC', 'PLC',
-                'KUKA KR C4', 'KUKA.PLC mxA', 'KUKA.HMI', 'WorkVisual',
-                'BECKHOFF TwinCAT', 'EtherCAT', 'CX5130', 'CP6606',
-                'Digital Input', 'Digital Output', 'Analog Input', 'Analog Output',
-                'PROFINET', 'PROFIBUS', 'Industrial Ethernet',
-                'I0.0', 'I0.1', 'I0.2', 'Q0.0', 'Q0.1', 'Q0.2', 'DB1', 'FC1', 'FB1',
-                'Safety PLC', 'Distributed I/O', 'HMI Panel'
-            ];
-
-            setInterval(() => {
-                const bits = document.createElement('div');
-                bits.className = 'plc-bits';
-                bits.style.left = Math.random() * window.innerWidth + 'px';
-                bits.style.top = Math.random() * window.innerHeight + 'px';
-                bits.textContent = terms[Math.floor(Math.random() * terms.length)];
-                bits.style.animation = 'blink 1s ease-in-out';
-                document.body.appendChild(bits);
-
-                // Usuwanie elementu po animacji
-                setTimeout(() => bits.remove(), 2000);
-            }, 300);
-        }
-
-        createPLCBits();
 
         // Funkcjonalność przełącznika motywu
         const themeToggle = document.querySelector('.theme-toggle');
@@ -1141,7 +950,7 @@
                             clearInterval(interval);
                             resolve();
                         }
-                    }, 1);
+                    }, 10);
                 });
             }
 
@@ -1184,7 +993,7 @@
             typeSequence();
         });
 
-        // Add this JavaScript to handle active section highlighting
+        // Aktywne linki w spisie treści
         document.addEventListener('DOMContentLoaded', () => {
             const sections = document.querySelectorAll('section');
             const tocLinks = document.querySelectorAll('.table-of-contents a');
@@ -1197,9 +1006,9 @@
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        // Remove active class from all links
+                        // Usuń aktywną klasę ze wszystkich linków
                         tocLinks.forEach(link => link.classList.remove('active'));
-                        // Add active class to current section link
+                        // Dodaj aktywną klasę do bieżącej sekcji
                         const activeLink = document.querySelector(`.table-of-contents a[href="#${entry.target.id}"]`);
                         if (activeLink) activeLink.classList.add('active');
                     }
@@ -1207,6 +1016,65 @@
             }, observerOptions);
 
             sections.forEach(section => observer.observe(section));
+        });
+
+        // Add this to your JavaScript section
+        document.addEventListener('DOMContentLoaded', () => {
+            // Create circuit lines
+            for (let i = 0; i < 10; i++) {
+                const line = document.createElement('div');
+                line.className = 'circuit-line';
+                line.style.top = `${Math.random() * 100}%`;
+                line.style.animationDelay = `${Math.random() * 3}s`;
+                document.body.appendChild(line);
+            }
+
+            // PLC and KUKA related texts
+            const texts = [
+                'I0.0', 'I0.1', 'Q0.0', 'Q0.1', 'M0.0',
+                'LIN', 'PTP', 'CIRC', 'SPTP', 'HOME',
+                'BOOL', 'INT', 'REAL', 'STRUCT', 'ARRAY',
+                'KRC4', 'KR16', 'KUKA.LoadDataDet', 'KUKA.HMI',
+                'Network 1', 'Network 2', 'OB1', 'FC1', 'DB1'
+            ];
+
+            // Create floating texts
+            setInterval(() => {
+                const text = document.createElement('div');
+                text.className = 'floating-text';
+                text.textContent = texts[Math.floor(Math.random() * texts.length)];
+                text.style.left = `${Math.random() * 100}%`;
+                text.style.top = `${Math.random() * 100}%`;
+                document.body.appendChild(text);
+
+                // Animate and remove
+                text.animate([
+                    { opacity: 0, transform: 'translateY(20px)' },
+                    { opacity: 0.8, transform: 'translateY(0)' },
+                    { opacity: 0, transform: 'translateY(-20px)' }
+                ], {
+                    duration: 5000,
+                    easing: 'ease-out'
+                }).onfinish = () => text.remove();
+            }, 100);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const binaryRain = document.getElementById('binaryRain');
+            
+            function createBinaryDrop() {
+                const drop = document.createElement('div');
+                drop.className = 'binary-drop';
+                drop.style.left = `${Math.random() * 100}%`;
+                drop.textContent = Math.random() > 0.5 ? '1' : '0';
+                binaryRain.appendChild(drop);
+                
+                drop.addEventListener('animationend', () => {
+                    drop.remove();
+                });
+            }
+
+            setInterval(createBinaryDrop, 100);
         });
     </script>
 </body>
