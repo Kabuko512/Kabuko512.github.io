@@ -3,1104 +3,493 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jakub Czaplicki - Portfolio</title>
-    <!-- GSAP -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Świąteczny Prezent dla Żonki</title>
     <style>
-        /* Resetowanie stylów */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* Zmienne CSS dla motywów */
-        :root {
-            --primary: #0f172a;
-            --secondary: #1e293b;
-            --accent: #60a5fa;
-            --accent-rgb: 96, 165, 250;
-            --text: #e2e8f0;
-            --bg: #1a202c;
-            --card-bg: var(--secondary);
-            --card-hover: #2d3748;
-            --overlay-bg: rgba(255, 255, 255, 0.1);
-            --overlay-bg-hover: rgba(255, 255, 255, 0.2);
-        }
-
-        :root[data-theme="light"] {
-            --primary: #f8fafc;
-            --secondary: #e2e8f0;
-            --accent: #2563eb;
-            --accent-rgb: 37, 99, 235;
-            --text: #1e293b;
-            --bg: #f0f2f5;
-            --card-bg: var(--secondary);
-            --card-hover: #d9d9d9;
-            --overlay-bg: rgba(0, 0, 0, 0.05);
-            --overlay-bg-hover: rgba(0, 0, 0, 0.1);
-        }
-
+        /* Ogólne style */
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            background: #0a1a1f;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* PCB pattern background */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                linear-gradient(90deg, transparent 95%, #1e4d3a 95%),
-                linear-gradient(transparent 95%, #1e4d3a 95%);
-            background-size: 20px 20px;
-            opacity: 0.3;
-            z-index: -2;
-        }
-
-        /* Flowing circuits animation */
-        .circuit-line {
-            position: fixed;
-            background: linear-gradient(90deg, transparent, #00ff9d, transparent);
-            height: 2px;
-            width: 100%;
-            opacity: 0;
-            z-index: -1;
-            animation: flow 3s infinite;
-        }
-
-        /* Floating text elements */
-        .floating-text {
-            position: fixed;
-            color: rgba(0, 255, 157, 0.3);
-            font-family: 'Courier New', monospace;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        @keyframes flow {
-            0% {
-                transform: translateX(-100%);
-                opacity: 0;
-            }
-            50% {
-                opacity: 0.5;
-            }
-            100% {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .hero {
-            position: relative;
-            min-height: 100vh;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--primary);
-            text-align: center;
-            padding: 0 20px;
-            background: #0a1a1f;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, var(--primary) 0%, var(--secondary) 100%);
-            animation: gradientBG 15s ease infinite;
-            opacity: 0.9;
-            z-index: -1;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                linear-gradient(90deg, transparent 49%, #0f2 1%, transparent 51%) 0 0 / 50px 50px,
-                linear-gradient(0deg, transparent 49%, #0f2 1%, transparent 51%) 0 0 / 50px 50px;
-            opacity: 0.1;
-            animation: circuitMove 20s linear infinite;
-        }
-
-        .hero::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(0,255,0,0.1) 0%, transparent 70%);
-            animation: glow 4s ease-in-out infinite;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            padding: 2rem;
-            border-radius: 10px;
-            background: rgba(0, 20, 20, 0.7);
-            border: 1px solid #0f2;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
-            backdrop-filter: blur(5px);
-        }
-
-        .name-container {
-            margin-bottom: 2rem;
-        }
-
-        .glitch {
-            font-size: 4rem;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(0,255,255,0.5);
-            position: relative;
-            animation: glitchText 10s infinite;
-            color: #0f2;
-            text-shadow: 
-                0 0 2px #0f2,
-                0 0 5px #0f2,
-                0 0 10px #0f2;
-            font-family: 'Share Tech Mono', monospace;
-        }
-/* Binary rain effect */
-.binary-rain {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-}
-
-.binary-drop {
-    position: absolute;
-    color: #0f2;
-    font-family: monospace;
-    font-size: 14px;
-    opacity: 0;
-    animation: rain 10s linear infinite;
-}
-
-/* PLC status indicators */
-.plc-status {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-    justify-content: center;
-}
-
-.status-led {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #0f2;
-    animation: blink 1s infinite;
-}
-
-.status-led:nth-child(2) { animation-delay: 0.2s; }
-.status-led:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes circuitMove {
-    0% { background-position: 0 0; }
-    100% { background-position: 50px 50px; }
-}
-
-@keyframes glow {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 0.8; }
-}
-
-@keyframes rain {
-    0% {
-        transform: translateY(-100%);
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(100vh);
-        opacity: 0;
-    }
-}
-
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-}
-        .title-bar {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 1rem;
-            padding: 0.5rem;
-        }
-
-        .typewriter {
-            color: var(--accent);
-            font-size: 1.5rem;
-            overflow: hidden;
-            white-space: nowrap;
-            border-right: 2px solid var(--accent);
-            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
-        }
-
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: var(--accent); }
-        }
-
-        .contact-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            margin-top: 2rem;
-            align-items: center;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            position: relative;
-            transition: transform 0.2s;
-            color: var(--text);
-            text-decoration: none;
-            background: var(--overlay-bg);
-            border-radius: 2rem;
-        }
-
-        .contact-item:hover {
-            transform: translateY(-2px);
-            background: var(--overlay-bg-hover);
-        }
-
-        .contact-item i {
-            color: var(--accent);
-            font-size: 1.2rem;
-        }
-
-        .section {
-            padding: 5rem 0;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: var(--accent);
-            position: relative;
-            padding-left: 1rem;
-            width: 50%;
-        }
-
-        .section-title::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 4px;
-            height: 100%;
-            background: var(--accent);
-            border-radius: 2px;
-        }
-
-        .timeline {
-            position: relative;
-            padding: 2rem 0;
-            text-align: center;
-        }
-
-        .timeline::before {
-            display: none;
-        }
-
-        .timeline-item {
-            margin: 0 auto 2rem;
-            padding: 2rem;
-            background: var(--card-bg);
-            border-radius: 0.5rem;
-            position: relative;
-            transition: all 0.1s ease;
-            text-align: center;
-            max-width: 800px;
-            opacity: 1;
-        }
-
-        .timeline-item h3,
-        .timeline-item p {
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-
-        .timeline-item ul {
-            list-style: none;
+            margin: 0;
             padding: 0;
-            text-align: left;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .timeline-item li {
-            margin-bottom: 0.5rem;
-        }
-
-        .timeline-item:hover {
-            transform: scale(1.05);
-            background: var(--card-hover);
-            z-index: 1;
-        }
-
-        .timeline-item:not(:hover) {
-            opacity: 0.8;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .skill-card {
-            background: var(--secondary);
-            padding: 2rem;
-            border-radius: 0.5rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
+            background: url('https://www.appleking.pl/blog/wp-content/uploads/2024/11/apple-wallpaper-christmas.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
             overflow: hidden;
-            opacity: 1;
+            position: relative;
         }
 
-        .skill-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .certificate-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .certificate-item {
-            background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-            opacity: 1;
-            text-align: center;
-        }
-
-        .certificate-item:hover {
-            transform: scale(1.05);
-            background: var(--card-hover);
-            z-index: 1;
-        }
-
-        .certificate-item:not(:hover) {
-            opacity: 0.7;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @keyframes glitchText {
-            0% { transform: translate(0); }
-            20% { transform: translate(0px, 0px); }
-            40% { transform: translate(0px, 0px); }
-            60% { transform: translate(0px, 0px); }
-            80% { transform: translate(0px, 0px); }
-            100% { transform: translate(0); }
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            .timeline-item {
-                margin-left: 1rem;
-            }
-        }
-
-        /* Przycisk zmiany motywu */
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: var(--secondary);
-            color: var(--text);
-            border: none;
+        /* Efekt padającego śniegu */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            width: 10px;
+            height: 10px;
+            background: white;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            opacity: 0.8;
+            animation: fall linear infinite;
         }
 
-        .theme-toggle:hover {
-            transform: scale(1.1);
-            background: var(--accent);
-            color: var(--secondary);
-        }
-
-        /* Ekran ładowania */
-        .loader-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            z-index: 9999;
-            padding: 2rem;
-            font-family: 'Courier New', monospace;
-            color: #0f0;
-            overflow: hidden;
-        }
-
-        .bios-screen {
-            max-width: 800px;
-            margin: 0 auto;
-            line-height: 1.5;
-        }
-
-        .bios-line {
-            margin: 0;
-            padding: 2px 0;
-            white-space: pre;
-        }
-
-        .bios-line.final-message {
-            font-size: 2rem;
-            text-align: center;
-            margin-top: 20px;
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        .cursor {
-            display: inline-block;
-            width: 8px;
-            height: 15px;
-            background: var(--accent);
-            margin-left: 5px;
-            animation: cursor-blink 1s infinite;
-        }
-
-        @keyframes cursor-blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        /* Spis treści */
-        .table-of-contents {
-            position: fixed;
-            right: 2rem;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(32, 33, 36, 0.9);
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            padding: 1rem;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
-            z-index: 100;
-        }
-
-        .toc-header {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: #00ff00;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #30363d;
-        }
-
-        .table-of-contents ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .table-of-contents li {
-            margin: 0.5rem 0;
-        }
-
-        .table-of-contents a {
-            color: #fff;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.85rem;
-            padding: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .table-of-contents a:hover,
-        .table-of-contents a.active {
-            color: #00ff00;
-            background: rgba(0, 255, 0, 0.1);
-            border-radius: 4px;
-            border-left: 3px solid #00ff00;
-        }
-
-        .table-of-contents i {
-            width: 16px;
-        }
-
-        @media (max-width: 1200px) {
-            .table-of-contents {
-                display: none;
-            }
-        }
-
-        @keyframes circuitMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 50px 50px; }
-        }
-
-        @keyframes glow {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 0.8; }
-        }
-
-        @keyframes rain {
+        @keyframes fall {
             0% {
-                transform: translateY(-100%);
-                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.8;
             }
             100% {
-                transform: translateY(100vh);
-                opacity: 0;
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0.2;
             }
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+        /* Migające gwiazdki */
+        .star {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: twinkle 2s infinite;
         }
 
-        /* Add these styles to your CSS section */
-        .scroll-indicator {
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.2; }
+        }
+
+        /* Kontener na treść */
+        .container {
             position: absolute;
-            bottom: 2rem;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #fff;
+            z-index: 2;
+        }
+
+        /* Pudełko prezentowe */
+        .gift-box {
+            width: 150px;
+            height: 150px;
+            background: #D32F2F;
+            position: relative;
+            cursor: pointer;
+            transform: rotate(0deg);
+            transition: transform 0.5s, top 1s, left 1s;
+            margin: 0 auto;
+        }
+
+        .gift-box:hover {
+            transform: rotate(10deg);
+        }
+
+        .lid {
+            width: 100%;
+            height: 30%;
+            background: #B71C1C;
+            position: absolute;
+            top: -30%;
+            left: 0;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            transition: transform 1s;
+        }
+
+        .body {
+            width: 100%;
+            height: 100%;
+            background: #D32F2F;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: transform 1s;
+        }
+
+        .ribbon-horizontal, .ribbon-vertical {
+            position: absolute;
+            background: #FFC107;
+        }
+
+        .ribbon-horizontal {
+            width: 100%;
+            height: 20px;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+        }
+
+        .ribbon-vertical {
+            width: 20px;
+            height: 100%;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+        }
+
+        .bow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            background: #FFC107;
+            border-radius: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+
+        .bow::before, .bow::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 40px;
+            background: #FFC107;
+            border-radius: 10px;
+        }
+
+        .bow::before {
+            top: -10px;
+            left: 10px;
+        }
+
+        .bow::after {
+            top: -10px;
+            left: 10px;
+            transform: rotate(90deg);
+        }
+
+        /* Dymek nad pudełkiem */
+        .speech-bubble {
+            position: absolute;
+            top: -60px;
             left: 50%;
             transform: translateX(-50%);
-            color: #0f2;
-            font-size: 2rem;
-            animation: bounce 2s infinite;
-            cursor: pointer;
-            z-index: 10;
-            text-shadow: 
-                0 0 5px #0f2,
-                0 0 10px #0f2;
-        }
-
-        .scroll-indicator:hover {
+            background: rgba(0, 0, 0, 0.7);
             color: #fff;
-            text-shadow: 
-                0 0 5px #fff,
-                0 0 10px #0f2,
-                0 0 20px #0f2;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            white-space: nowrap;
+            animation: float 3s ease-in-out infinite;
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 10px;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.7) transparent transparent transparent;
+        }
+
+        @keyframes float {
+            0%, 100% {
                 transform: translateX(-50%) translateY(0);
             }
-            40% {
-                transform: translateX(-50%) translateY(-15px);
+            50% {
+                transform: translateX(-50%) translateY(-10px);
             }
-            60% {
-                transform: translateX(-50%) translateY(-7px);
+        }
+
+        /* Wiadomość po otwarciu pudełka */
+        .message {
+            display: none;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            max-width: 400px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .message h1 {
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+
+        .message p {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .message ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .message li {
+            background: #FFFFFF;
+            color: #000;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            font-weight: bold;
+            word-break: break-all;
+        }
+
+        /* Animacja fade-in dla wiadomości */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Animacja otwierania pudełka */
+        .opened .lid {
+            transform: rotateX(-180deg);
+            transition: transform 1s ease-in-out;
+        }
+
+        .opened .body {
+            transform: translateY(-20px);
+            transition: transform 1s ease-in-out;
+        }
+
+        /* Styl iPhone'ów */
+        .iphone {
+            position: absolute;
+            width: 50px;
+            height: 100px;
+            background-size: cover;
+            background-repeat: no-repeat;
+            opacity: 0;
+            animation: flyOut 2s forwards;
+        }
+
+        @keyframes flyOut {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--translateX), var(--translateY)) rotate(var(--rotate));
+            }
+        }
+
+        /* Styl dużego iPhone'a w tle */
+        .large-iphone {
+            position: fixed;
+            width: 300px;
+            height: 600px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            animation: appearLarge 2s forwards;
+            z-index: 1;
+        }
+
+        @keyframes appearLarge {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.5;
+            }
+        }
+
+        /* Responsywność */
+        @media (max-width: 600px) {
+            .gift-box {
+                width: 100px;
+                height: 100px;
+            }
+
+            .speech-bubble {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+
+            .message h1 {
+                font-size: 20px;
+            }
+
+            .message p {
+                font-size: 16px;
+            }
+
+            .message ul {
+                max-width: 250px;
+                margin: 0 auto;
+            }
+
+            .iphone {
+                width: 35px;
+                height: 70px;
+            }
+
+            .large-iphone {
+                width: 200px;
+                height: 400px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Spis treści -->
-    <nav class="table-of-contents">
-        <div class="toc-header">
-            <i class="fas fa-list"></i>
-            <span>Spis treści</span>
-        </div>
-        <ul>
-            <li><a href="#home"><i class="fas fa-home"></i> Start</a></li>
-            <li><a href="#about"><i class="fas fa-user"></i> O mnie</a></li>
-            <li><a href="#experience"><i class="fas fa-briefcase"></i> Doświadczenie</a></li>
-            <li><a href="#skills"><i class="fas fa-tools"></i> Umiejętności</a></li>
-        </ul>
-    </nav>
-
-    <div class="loader-container">
-        <div class="bios-screen">
-            <div id="bios-text"></div>
-        </div>
-    </div>
-
-    <button class="theme-toggle" aria-label="Toggle theme">
-        <i class="fas fa-sun"></i>
-    </button>
-
-    <!-- Nagłówek -->
-    <header class="hero" id="home">
-        <div class="binary-rain" id="binaryRain"></div>
-        <div class="hero-content">
-            <div class="name-container">
-                <h1 class="glitch" data-text="Jakub Czaplicki">Jakub Czaplicki</h1>
-                <div class="title-bar">
-                    <p class="typewriter">Automatyk | Programista PLC</p>
-                </div>
-                <div class="plc-status">
-                    <div class="status-led"></div>
-                    <div class="status-led"></div>
-                    <div class="status-led"></div>
-                </div>
-                <div class="contact-stack">
-                    <a href="mailto:0czaplickijakub0@email.com" class="contact-item">
-                        <i class="fas fa-envelope"></i>
-                        <span class="contact-text">0czaplickijakub0@email.com</span>
-                    </a>
-                    <a href="tel:+789360511" class="contact-item">
-                        <i class="fas fa-phone"></i>
-                        <span class="contact-text">+48 789 360 511</span>
-                    </a>
-                    <a href="https://github.com/Kabuko512" class="contact-item">
-                        <i class="fab fa-github"></i>
-                        <span class="contact-text">GitHub</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="scroll-indicator">
-            <i class="fas fa-chevron-down"></i>
-        </div>
-    </header>
-
-    <div class="container">
-        <!-- Sekcja "O mnie" -->
-        <section id="about" class="section">
-            <h2 class="section-title">O mnie</h2>
-            <p>Od najmłodszych lat fascynowało mnie, jak działają różne urządzenia i mechanizmy. Rozbieranie i składanie zabawek było moją codziennością, a ciekawość świata techniki prowadziła mnie przez kolejne etapy życia. Zawsze wierzyłem, że technologia to nie tylko narzędzie, ale również sztuka, która łączy w sobie kreatywność i precyzję.</p>
-            <p>Obecnie, jako Automatyk Przemysłowy, mam niesamowitą możliwość łączenia mojej pracy z pasją do programowania, innowacji oraz efektywnego zarządzania systemami utrzymania ruchu. Każdego dnia staję przed nowymi wyzwaniami, które motywują mnie do ciągłego rozwoju i poszukiwania najlepszych rozwiązań. Wierzę, że kluczem do sukcesu jest połączenie wiedzy technicznej z otwartością na nowe idee i gotowością do nauki.</p>
-            <p>Moja kariera zawodowa była pełna różnorodnych doświadczeń. Pracując jako Administrator Magazynu Utrzymania Ruchu, Mechanik, Technik, operator, programista CNC czy koordynator działu, zdobyłem wszechstronną wiedzę i umiejętności, które pozwalają mi zrozumieć złożoność procesów przemysłowych. Każde z tych stanowisk i wspaniali ludzie z którymi miałem możliwość współpracować nauczyło mnie, jak ważna jest praca zespołowa, komunikacja i dzielenie się wiedzą.</p>
-            <p>Poza pracą poświęcam czas na rozwijanie swoich pasji, takich jak elektronika, robotyka i sztuczna inteligencja. Eksperymentuję z nowymi technologiami, biorę udział w projektach open-source i stale poszerzam swoje horyzonty. Wierzę, że dzielenie się wiedzą i doświadczeniem przyczynia się do postępu całej społeczności.</p>
-        </section>
-
-        <!-- Sekcja "Doświadczenie zawodowe" -->
-        <section id="experience" class="section">
-            <h2 class="section-title">Doświadczenie zawodowe</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <h3>Starszy Automatyk</h3>
-                    <p>Electropoli Poland Sp. z o.o. | 2023 - Obecnie</p>
-                    <ul>
-                        <li>Prowadzenie i nadzór nad projektami automatyzacji procesów produkcyjnych.</li>
-                        <li>Wdrażanie obsługi systemów big data zgodnie z standardami Industry 4.0.</li>
-                        <li>Integracja systemów automatyki z systemami SCADA.</li>
-                        <li>Szkolenie i mentorowanie młodszych inżynierów automatyków.</li>
-                        <li>Zapewnienie zgodności projektów z normami bezpieczeństwa.</li>
-                        <li>Współpraca z działami produkcji i technologii w celu optymalizacji procesów.</li>
-                    </ul>
-                </div>
-                <div class="timeline-item">
-                    <h3>Automatyk Utrzymania Ruchu</h3>
-                    <p>Electropoli Poland Sp. z o.o. | 2019 - 2023</p>
-                    <ul>
-                        <li>Programowanie sterowników PLC Siemens (TIA Portal, Step7)</li>
-                        <li>Projektowanie i optymalizacja interfejsów HMI (WinCC)</li>
-                        <li>Tworzenie skryptów VB do obsługi paneli HMI</li>
-                        <li>Modernizacja systemów raportowania (Excel + VBA + PowerQuery)</li>
-                        <li>Utrzymanie ciągłości pracy linii produkcyjnych</li>
-                        <li>Dokumentacja techniczna i instrukcje stanowiskowe</li>
-                    </ul>
-                </div>
-                <div class="timeline-item">
-                    <h3>Koordynator zespołu</h3>
-                    <p>Nord Napędy sp. z o.o. | 2013 - 2016</p>
-                    <ul>
-                        <li>Zarządzanie zespołem operatorów maszyn CNC</li>
-                        <li>Programowanie maszyn sterowanych numerycznie</li>
-                        <li>Nadzór nad procesami jakościowymi</li>
-                        <li>Optymalizacja procesów produkcyjnych</li>
-                    </ul>
-                </div>
-                <div class="timeline-item">
-                    <h3>Administrator magazynu UR</h3>
-                    <p>AB World Foods Ltd | 2012 - 2013</p>
-                    <ul>
-                        <li>Zarządzanie magazynem części zamiennych</li>
-                        <li>Wdrażanie systemu CMMS</li>
-                        <li>Optymalizacja stanów magazynowych</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Sekcja "Kluczowe umiejętności" -->
-        <section id="skills" class="section skills">
-            <h2 class="section-title">Kluczowe umiejętności</h2>
-            <div class="grid">
-                <div class="skill-card">
-                    <h3><i class="fas fa-microchip"></i> Programowanie PLC</h3>
-                    <ul>
-                        <li>Siemens TIA Portal</li>
-                        <li>STEP7</li>
-                        <li>CODESYS</li>
-                        <li>Programowanie struktur</li>
-                        <li>Optymalizacja kodu</li>
-                    </ul>
-                </div>
-                <div class="skill-card">
-                    <h3><i class="fas fa-desktop"></i> Wizualizacje</h3>
-                    <ul>
-                        <li>WinCC</li>
-                        <li>Panele HMI Siemens</li>
-                        <li>Beckhoff</li>
-                        <li>Projektowanie UI/UX</li>
-                    </ul>
-                </div>
-                <div class="skill-card">
-                    <h3><i class="fas fa-robot"></i> Automatyka</h3>
-                    <ul>
-                        <li>Diagnostyka</li>
-                        <li>Modernizacje</li>
-                        <li>Integracja systemów</li>
-                        <li>Robotyka (Yaskawa)</li>
-                    </ul>
-                </div>
-                <div class="skill-card">
-                    <h3>Planowanie i Realizacja Planów Konserwacyjnych</h3>
-                </div>
-                <div class="skill-card">
-                    <h3>Rozwiązywanie problemów</h3>
-                </div>
-                <div class="skill-card">
-                    <h3>Efektywna praca pod presją czasu</h3>
-                </div>
-                <div class="skill-card">
-                    <h3>Doświadczenie w kierowaniu zespołem</h3>
-                </div>
-            </div>
-        </section>
-
-        <!-- Sekcja "Certyfikaty i szkolenia" -->
-        <section id="certificates" class="section">
-            <h2 class="section-title">Certyfikaty i szkolenia</h2>
-            <div class="certificate-grid">
-                <div class="certificate-item">
-                    <h3>Uprawnienia SEP</h3>
-                    <p>G1E, G2E, G3E</p>
-                </div>
-                <div class="certificate-item">
-                    <h3>PROFINET</h3>
-                    <p>Instalacja i Konfiguracja</p>
-                </div>
-                <div class="certificate-item">
-                    <h3>Yaskawa Academy</h3>
-                    <p>Programowanie robotów przemysłowych</p>
-                </div>
-                <div class="certificate-item">
-                    <h3>TIA Portal</h3>
-                    <p>Poziom zaawansowany</p>
-                </div>
-                <div class="certificate-item">
-                    <h3>S7-STL Programowanie w TIA Portal</h3>
-                </div>
-                <div class="certificate-item">
-                    <h3>Szkolenie Wysokościowe</h3>
-                    <p>Kurs Alpinista Przemysłowy</p>
-                </div>
-                <div class="certificate-item">
-                    <h3>SEW Motoreduktory</h3>
-                    <p>Obsługa i konserwacja wraz z falownikami Movimot</p>
-                </div>
-                <div class="certificate-item">
-                    <h3>VIMS</h3>
-                    <p>Obsługa mierników drgań ADASH</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Sekcja "Języki" -->
-        <section id="languages" class="section">
-            <h2 class="section-title">Języki</h2>
-            <div class="grid">
-                <div class="skill-card">
-                    <h3>Angielski</h3>
-                    <p>Poziom C2+</p>
-                </div>
-                <div class="skill-card">
-                    <h3>Niemiecki</h3>
-                    <p>Poziom podstawowy</p>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- Skrypt JavaScript -->
+    <!-- Efekt padającego śniegu i migających gwiazdek -->
     <script>
-        // Rejestracja GSAP ScrollTrigger
-        gsap.registerPlugin(ScrollTrigger);
-
-        // Animacje sekcji przy przewijaniu
-        gsap.utils.toArray('.section').forEach(function(section) {
-            gsap.from(section, {
-                opacity: 0,
-                y: 50,
-                duration: 1,
-                scrollTrigger: {
-                    trigger: section,
-                    start: "top 80%",
-                    toggleActions: "play none none none"
-                }
-            });
-        });
-
-        // Funkcjonalność przełącznika motywu
-        const themeToggle = document.querySelector('.theme-toggle');
-        const root = document.documentElement;
-        const icon = themeToggle.querySelector('i');
-
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = root.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            root.setAttribute('data-theme', newTheme);
-            icon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
-            localStorage.setItem('theme', newTheme);
-        });
-
-        // Sprawdzenie zapisanej preferencji motywu
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            root.setAttribute('data-theme', savedTheme);
-            icon.className = savedTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        // Funkcja tworząca śnieżynki
+        function createSnowflakes() {
+            const snowflakeCount = 100;
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                snowflake.style.left = Math.random() * 100 + 'vw';
+                snowflake.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                snowflake.style.opacity = Math.random();
+                snowflake.style.width = snowflake.style.height = (Math.random() * 5 + 5) + 'px';
+                snowflake.style.background = 'white';
+                document.body.appendChild(snowflake);
+            }
         }
 
-        // Sekwencja ładowania
-        document.addEventListener('DOMContentLoaded', () => {
-            const biosText = document.getElementById('bios-text');
-            const loader = document.querySelector('.loader-container');
-            let isLoadingComplete = false;
-
-            const skills = [
-                "Programowanie PLC",
-                "Systemy SCADA",
-                "Automatyka przemysłowa",
-                "Sieci przemysłowe",
-                "Język C++",
-                "Język Python",
-                "TIA Portal",
-                "TwinCat 3",
-                "Projektowanie układów sterowania",
-                "Diagnostyka systemów automatyki",
-            ];
-
-            const bootSequence = [
-                "Inicjalizacja systemu...",
-                "Wykryto procesor: Human Brain v1.0",
-                "Ładowanie lat doświadczenia...",
-                "Inicjalizacja profilu zawodowego...",
-                `Ładowanie CV: Jakub Czaplicki`,
-                "Weryfikacja umiejętności...",
-                "",
-                "SKANOWANIE UMIEJĘTNOŚCI:",
-                "===================="
-            ];
-
-            function addLine(text, delay = 100, isFinalMessage = false) {
-                return new Promise(resolve => {
-                    if (!biosText) return resolve();
-                    const line = document.createElement('div');
-                    line.className = 'bios-line';
-                    if (isFinalMessage) {
-                        line.classList.add('final-message');
-                    }
-                    biosText.appendChild(line);
-                    
-                    let i = 0;
-                    const interval = setInterval(() => {
-                        if (i < text.length) {
-                            line.textContent += text[i];
-                            i++;
-                        } else {
-                            clearInterval(interval);
-                            resolve();
-                        }
-                    }, 10);
-                });
+        // Funkcja tworząca gwiazdki
+        function createStars() {
+            const starCount = 50;
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.top = Math.random() * 50 + 'vh';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                star.style.opacity = Math.random();
+                star.style.width = star.style.height = (Math.random() * 3 + 2) + 'px';
+                document.body.appendChild(star);
             }
+        }
 
-            function hideLoader() {
-                if (!loader || isLoadingComplete) return;
-                isLoadingComplete = true;
-                
-                loader.style.opacity = '0';
-                loader.style.transition = 'opacity 0.5s ease';
-                setTimeout(() => {
-                    if (loader) loader.style.display = 'none';
-                }, 500);
-            }
+        createSnowflakes();
+        createStars();
+    </script>
 
-            async function typeSequence() {
-                try {
-                    for (const line of bootSequence) {
-                        await addLine(line);
-                        await new Promise(resolve => setTimeout(resolve, 300));
-                    }
+    <div class="container">
+        <div class="gift-box" id="giftBox">
+            <div class="lid"></div>
+            <div class="body"></div>
+            <div class="ribbon-horizontal"></div>
+            <div class="ribbon-vertical"></div>
+            <div class="bow"></div>
+            <div class="speech-bubble">Otwórz mnie!</div>
+        </div>
+        <div class="message" id="message">
+            <h1>Wszystkiego najlepszego kochana Żonko!</h1>
+            <p>Poniżej kody podarunkowe do APPLE STORE:</p>
+            <ul id="codesList">
+                <!-- Kody zostaną wygenerowane przez JavaScript -->
+            </ul>
+        </div>
+    </div>
 
-                    for (const skill of skills) {
-                        await addLine(`[OK] ${skill}`);
-                        await new Promise(resolve => setTimeout(resolve, 200));
-                    }
+    <!-- Poprawiony element audio z dodanymi <source> -->
+    <audio id="audio">
+        <source src="klocuch.mp3" type="audio/mpeg">
+        <!-- Alternatywny format lub komunikat dla przeglądarek, które nie obsługują audio -->
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        Twoja przeglądarka nie obsługuje elementu audio.
+    </audio>
 
-                    await addLine("");
-                    await addLine("====================");
-                    await addLine("Załadowano pomyślnie!", 100, true);
-                    await new Promise(resolve => setTimeout(resolve, 1000));
+    <!-- Duży iPhone w tle (initially hidden) -->
+    <div class="large-iphone" id="largeIphone"></div>
 
-                    hideLoader();
-                } catch (error) {
-                    console.error('Error during loading sequence:', error);
-                    hideLoader();
+    <script>
+        // Funkcja generująca losowe kody Apple Store
+        function generateRandomCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = '';
+            for (let i = 0; i < 16; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+                if ((i + 1) % 4 === 0 && i !== 15) {
+                    code += '-';
                 }
             }
+            return code;
+        }
 
-            // Rozpoczęcie sekwencji ładowania
-            typeSequence();
-        });
-
-        // Aktywne linki w spisie treści
-        document.addEventListener('DOMContentLoaded', () => {
-            const sections = document.querySelectorAll('section');
-            const tocLinks = document.querySelectorAll('.table-of-contents a');
-            
-            const observerOptions = {
-                threshold: 0.5,
-                rootMargin: "-50% 0px -50% 0px"
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        // Usuń aktywną klasę ze wszystkich linków
-                        tocLinks.forEach(link => link.classList.remove('active'));
-                        // Dodaj aktywną klasę do bieżącej sekcji
-                        const activeLink = document.querySelector(`.table-of-contents a[href="#${entry.target.id}"]`);
-                        if (activeLink) activeLink.classList.add('active');
-                    }
-                });
-            }, observerOptions);
-
-            sections.forEach(section => observer.observe(section));
-        });
-
-        // Add this to your JavaScript section
-        document.addEventListener('DOMContentLoaded', () => {
-            // Create circuit lines
-            for (let i = 0; i < 10; i++) {
-                const line = document.createElement('div');
-                line.className = 'circuit-line';
-                line.style.top = `${Math.random() * 100}%`;
-                line.style.animationDelay = `${Math.random() * 3}s`;
-                document.body.appendChild(line);
+        // Funkcja dodająca kody do listy
+        function populateCodes() {
+            const codesList = document.getElementById('codesList');
+            for (let i = 1; i <= 3; i++) {
+                const li = document.createElement('li');
+                li.innerHTML = `<strong>KOD ${i}:</strong> ${generateRandomCode()}`;
+                codesList.appendChild(li);
             }
+        }
 
-            // PLC and KUKA related texts
-            const texts = [
-                'I0.0', 'I0.1', 'Q0.0', 'Q0.1', 'M0.0',
-                'LIN', 'PTP', 'CIRC', 'SPTP', 'HOME',
-                'BOOL', 'INT', 'REAL', 'STRUCT', 'ARRAY',
-                'KRC4', 'KR16', 'KUKA.LoadDataDet', 'KUKA.HMI',
-                'Network 1', 'Network 2', 'OB1', 'FC1', 'DB1'
-            ];
+        // Generowanie kodów przy załadowaniu strony
+        populateCodes();
 
-            // Create floating texts
-            setInterval(() => {
-                const text = document.createElement('div');
-                text.className = 'floating-text';
-                text.textContent = texts[Math.floor(Math.random() * texts.length)];
-                text.style.left = `${Math.random() * 100}%`;
-                text.style.top = `${Math.random() * 100}%`;
-                document.body.appendChild(text);
+        // Funkcja tworząca iPhone'y
+        function createIphones(count) {
+            for (let i = 0; i < count; i++) {
+                const iphone = document.createElement('div');
+                iphone.classList.add('iphone');
+                // Ustawienie nowego obrazu iPhone'a
+                iphone.style.backgroundImage = 'url("https://assets.swappie.com/cdn-cgi/image/width=600,height=600,fit=contain,format=auto/swappie-iphone-16-pro-max-desert-titanium-back.png?v=63198538")';
+                // Ustawienie początkowej pozycji na środku pudełka
+                iphone.style.left = '50%';
+                iphone.style.top = '50%';
+                iphone.style.transform = 'translate(-50%, -50%)';
+                // Ustawienie losowych wartości dla animacji
+                iphone.style.setProperty('--translateX', (Math.random() * 800 - 400) + 'px'); // Zwiększony zakres
+                iphone.style.setProperty('--translateY', (Math.random() * -500) + 'px'); // Zwiększony zakres
+                iphone.style.setProperty('--rotate', (Math.random() * 360) + 'deg');
+                // Dodanie opóźnienia dla efektu fontanny
+                iphone.style.animationDelay = (Math.random() * 1) + 's'; // Większy zakres opóźnień
+                document.body.appendChild(iphone);
 
-                // Animate and remove
-                text.animate([
-                    { opacity: 0, transform: 'translateY(20px)' },
-                    { opacity: 0.8, transform: 'translateY(0)' },
-                    { opacity: 0, transform: 'translateY(-20px)' }
-                ], {
-                    duration: 5000,
-                    easing: 'ease-out'
-                }).onfinish = () => text.remove();
-            }, 100);
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const binaryRain = document.getElementById('binaryRain');
-            
-            function createBinaryDrop() {
-                const drop = document.createElement('div');
-                drop.className = 'binary-drop';
-                drop.style.left = `${Math.random() * 100}%`;
-                drop.textContent = Math.random() > 0.5 ? '1' : '0';
-                binaryRain.appendChild(drop);
-                
-                drop.addEventListener('animationend', () => {
-                    drop.remove();
+                // Usunięcie iPhone'a po zakończeniu animacji
+                iphone.addEventListener('animationend', () => {
+                    iphone.remove();
                 });
             }
+        }
 
-            setInterval(createBinaryDrop, 100);
+        // Funkcja tworząca iPhone'y po kliknięciu
+        function createIphonesOnClick(count) {
+            for (let i = 0; i < count; i++) {
+                createIphones(1);
+            }
+        }
+
+        // Obsługa kliknięcia na pudełko
+        document.addEventListener('DOMContentLoaded', function() {
+            const giftBox = document.getElementById('giftBox');
+            const message = document.getElementById('message');
+            const audio = document.getElementById('audio');
+            const largeIphone = document.getElementById('largeIphone');
+
+            giftBox.addEventListener('click', function() {
+                // Dodanie klasy 'opened' dla animacji
+                giftBox.classList.add('opened');
+
+                // Tworzenie iPhone'ów (np. 50 sztuk)
+                createIphonesOnClick(50);
+
+                // Pokaż wiadomość po zakończeniu animacji otwierania (1s)
+                setTimeout(() => {
+                    message.style.display = 'block';
+                }, 1000);
+
+                // Odtwórz muzykę (upewnij się, że plik audio jest dostępny)
+                audio.play().catch(function(error) {
+                    console.error('Błąd podczas odtwarzania audio:', error);
+                });
+
+                // Usuń dymek po otwarciu
+                const speechBubble = document.querySelector('.speech-bubble');
+                if (speechBubble) {
+                    speechBubble.style.display = 'none';
+                }
+
+                // Pokaż duży iPhone w tle z animacją
+                largeIphone.style.animation = 'appearLarge 2s forwards';
+            });
         });
     </script>
 </body>
