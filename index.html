@@ -27,9 +27,10 @@
   <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.9.3/tsparticles.bundle.min.js"></script>
 
   <!-- Font Awesome (do ikon) -->
-  <script src="https://kit.fontawesome.com/your_fontawesome_kit.js" crossorigin="anonymous"></script>
-  <!-- Powyżej wstaw swój własny kod z FontAwesome jeśli masz, 
-       ewentualnie użyj <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" /> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Jeśli masz własny kit FontAwesome, zamień powyższą linię na:
+       <script src="https://kit.fontawesome.com/your_fontawesome_kit.js" crossorigin="anonymous"></script>
+  -->
 
   <style>
     :root {
@@ -86,7 +87,7 @@
       width: 100%;
       position: fixed;
       top: 0;
-      z-index: 9999;
+      z-index: 1000;
       background-color: rgba(0,0,0,0.7);
       display: flex;
       align-items: center;
@@ -201,7 +202,7 @@
         right: -250px; /* Startowo poza ekranem */
         width: 250px;
         height: 100vh;
-        background: rgba(0,0,0,0.9);
+        background: rgba(0,0,0,0.95);
         flex-direction: column;
         justify-content: flex-start;
         align-items: flex-start;
@@ -243,7 +244,7 @@
     header {
       width: 100%;
       height: 100vh;
-      background: url("")
+      background: url("images/1.py.png")
         center center / cover no-repeat fixed;
       position: relative;
       display: flex;
@@ -406,55 +407,75 @@
       background: rgba(0,0,0,0.4);
     }
 
-    /* Karty z obrazkami (instalacje) */
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      position: relative;
-      overflow: hidden;
-      border-radius: 8px;
-      background: #333;
-      transition: transform 0.4s, box-shadow 0.4s;
-    }
-    .card:hover {
-      transform: scale(1.02);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.6);
-    }
-    .card img {
-      width: 100%;
-      display: block;
-      transition: transform 0.6s;
-    }
-    .card:hover img {
-      transform: scale(1.1);
-    }
-    .card-content {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 20px;
-      background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, transparent 100%);
-      color: #fff;
-      transform: translateY(100%);
-      transition: transform 0.5s;
-    }
-    .card:hover .card-content {
-      transform: translateY(0);
-    }
-    .card-content h3 {
-      color: var(--color-secondary);
-      margin-bottom: 10px;
-    }
-    .card-content p {
-      font-size: 0.9rem;
-      line-height: 1.4;
-    }
+    /* SEKCJA: INSTALACJE (z ujednoliconą strukturą) */
+    <section id="instalacje" data-aos="fade-up">
+      <h2 class="section-title" data-lng-key="installationsTitle">Instalacje</h2>
+      <div class="service-grid">
+        <!-- 1. Instalacje elektryczne -->
+        <div class="service-item" data-aos="fade-up">
+          <div class="service-top">
+            <i class="fas fa-bolt"></i>
+            <h3 data-lng-key="installationsH3_1">Instalacje elektryczne</h3>
+          </div>
+          <div class="service-desc">
+            <p data-lng-key="installationsP_1">
+              Projektujemy i wykonujemy trasy kablowe (rurowe, korytowe, wtynkowe) 
+              z zachowaniem wszelkich wymagań norm PN-IEC/EN. Każda instalacja 
+              jest weryfikowana pod kątem bezpieczeństwa i niezawodności, 
+              gwarantując wieloletnie, bezawaryjne działanie.
+            </p>
+          </div>
+        </div>
+        <!-- 2. Instalacje wodno-kanalizacyjne -->
+        <div class="service-item" data-aos="fade-up" data-aos-delay="100">
+          <div class="service-top">
+            <i class="fas fa-water"></i>
+            <h3 data-lng-key="installationsH3_2">Instalacje wodno-kanalizacyjne</h3>
+          </div>
+          <div class="service-desc">
+            <p data-lng-key="installationsP_2">
+              Wdrażamy nowoczesne i tradycyjne technologie (stalowe gwintowane, 
+              systemy prasowane, tworzywa sztuczne). Zapewniamy kompletne 
+              wsparcie – od projektu, przez montaż i testy, aż po dokumentację
+              potwierdzającą zgodność z wymaganymi normami sanitarnymi i BHP.
+            </p>
+          </div>
+        </div>
+        <!-- 3. Transport powietrza -->
+        <div class="service-item" data-aos="fade-up" data-aos-delay="200">
+          <div class="service-top">
+            <i class="fas fa-wind"></i>
+            <h3 data-lng-key="installationsH3_3">Transport powietrza</h3>
+          </div>
+          <div class="service-desc">
+            <p data-lng-key="installationsP_3">
+              Projektujemy i realizujemy trasy sprężonego powietrza w zakładach przemysłowych, 
+              magazynach i budynkach użyteczności publicznej, uwzględniając normy ciśnieniowe 
+              i wymagania odnośnie bezpieczeństwa. Dbamy o optymalną wydajność,
+              aby obniżyć koszty związane z eksploatacją systemów pneumatycznych.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- CTA na końcu sekcji -->
+      <div style="text-align:center; margin-top: 30px;">
+        <a href="#kontakt" class="service-cta">Zapytaj o instalacje</a>
+      </div>
+    </section>
 
-    /* CASE STUDIES - bullet points */
+    /* Jeśli chcesz dodać ikony do instalacji, upewnij się, że używasz odpowiednich klas FontAwesome.
+       Przykładowo, zamiast ikony `fas fa-wind`, możesz użyć innej pasującej ikony.
+    */
+
+    /* Karty z obrazkami zostały zastąpione standardowymi `service-item` z ikonami i tekstem. */
+
+    /* Jeśli chcesz zachować obrazki, możesz je dodać wewnątrz `.service-top` lub jako tło w `.service-item`.
+       Jednakże dla ujednolicenia, zaleca się używanie ikon, podobnie jak w innych sekcjach.
+    */
+
+    /* ----------------------------------------------------------
+       CASE STUDIES - bullet points
+    ---------------------------------------------------------- */
     .case-study {
       margin-bottom: 40px;
     }
@@ -726,18 +747,17 @@
   <!-- Parallax placeholder -->
   <div class="parallax" data-aos="zoom-in"></div>
 
-  <!-- SEKCJA: INSTALACJE (karty z obrazkami) -->
-  <section id="instalacje">
-    <h2 class="section-title" data-aos="fade-up" data-lng-key="installationsTitle">Instalacje</h2>
-    <div class="card-grid">
+  <!-- SEKCJA: INSTALACJE -->
+  <section id="instalacje" data-aos="fade-up">
+    <h2 class="section-title" data-lng-key="installationsTitle">Instalacje</h2>
+    <div class="service-grid">
       <!-- 1. Instalacje elektryczne -->
-      <div class="card" data-aos="flip-left">
-        <img 
-          src="images/inst_elec.png" 
-          alt="Instalacje elektryczne" 
-        />
-        <div class="card-content">
+      <div class="service-item" data-aos="fade-up">
+        <div class="service-top">
+          <i class="fas fa-bolt"></i>
           <h3 data-lng-key="installationsH3_1">Instalacje elektryczne</h3>
+        </div>
+        <div class="service-desc">
           <p data-lng-key="installationsP_1">
             Projektujemy i wykonujemy trasy kablowe (rurowe, korytowe, wtynkowe) 
             z zachowaniem wszelkich wymagań norm PN-IEC/EN. Każda instalacja 
@@ -747,13 +767,12 @@
         </div>
       </div>
       <!-- 2. Instalacje wodno-kanalizacyjne -->
-      <div class="card" data-aos="flip-left" data-aos-delay="200">
-        <img 
-          src="images/2.mont.png" 
-          alt="Instalacje wodno-kanalizacyjne" 
-        />
-        <div class="card-content">
+      <div class="service-item" data-aos="fade-up" data-aos-delay="100">
+        <div class="service-top">
+          <i class="fas fa-water"></i>
           <h3 data-lng-key="installationsH3_2">Instalacje wodno-kanalizacyjne</h3>
+        </div>
+        <div class="service-desc">
           <p data-lng-key="installationsP_2">
             Wdrażamy nowoczesne i tradycyjne technologie (stalowe gwintowane, 
             systemy prasowane, tworzywa sztuczne). Zapewniamy kompletne 
@@ -763,13 +782,12 @@
         </div>
       </div>
       <!-- 3. Transport powietrza -->
-      <div class="card" data-aos="flip-left" data-aos-delay="400">
-        <img 
-          src="images/1.py.png" 
-          alt="Transport powietrza" 
-        />
-        <div class="card-content">
+      <div class="service-item" data-aos="fade-up" data-aos-delay="200">
+        <div class="service-top">
+          <i class="fas fa-wind"></i>
           <h3 data-lng-key="installationsH3_3">Transport powietrza</h3>
+        </div>
+        <div class="service-desc">
           <p data-lng-key="installationsP_3">
             Projektujemy i realizujemy trasy sprężonego powietrza w zakładach przemysłowych, 
             magazynach i budynkach użyteczności publicznej, uwzględniając normy ciśnieniowe 
@@ -858,12 +876,13 @@
           <h3 data-lng-key="measurementsH3_1">Pomiary energetyczne</h3>
         </div>
         <div class="service-desc">
-          Wykonujemy pomiary instalacji i urządzeń, sporządzając szczegółowe raporty dla zgodności z normami PN-EN (m.in. PN-EN 61557). 
-          Wczesna diagnostyka pomaga zapobiegać awariom, ograniczając koszty napraw i przestoje. 
-          <br/><br/>
-          Analizujemy zużycie energii w celu optymalizacji wydajności i wskazujemy obszary, w których 
-          możliwe są dodatkowe oszczędności – np. poprzez wymianę nieefektywnych urządzeń.
-          <br/><br/>
+          <p data-lng-key="measurementsP_1">
+            Wykonujemy pomiary instalacji i urządzeń, sporządzając szczegółowe raporty dla zgodności z normami PN-EN (m.in. PN-EN 61557). 
+            Wczesna diagnostyka pomaga zapobiegać awariom, ograniczając koszty napraw i przestoje. 
+            <br/><br/>
+            Analizujemy zużycie energii w celu optymalizacji wydajności i wskazujemy obszary, w których 
+            możliwe są dodatkowe oszczędności – np. poprzez wymianę nieefektywnych urządzeń.
+          </p>
           <a href="#kontakt" class="service-cta">Zapytaj o pomiary</a>
         </div>
       </div>
@@ -873,14 +892,15 @@
           <h3 data-lng-key="measurementsH3_2">Pomiary oświetlenia</h3>
         </div>
         <div class="service-desc">
-          Przeprowadzamy pomiary oświetlenia na stanowiskach pracy i strefach ewakuacyjnych, 
-          aby spełnić wymagania BHP i zapewnić komfort użytkowników. 
-          Działamy zgodnie z wytycznymi PN-EN 12464-1, co pozwala stworzyć 
-          zdrowe i bezpieczne warunki pracy. 
-          <br/><br/>
-          W razie potrzeby doradzamy w wyborze odpowiedniego systemu oświetlenia (LED, świetlówki, 
-          halogeny) z uwzględnieniem specyfiki produkcji i aspektów ekonomicznych.
-          <br/><br/>
+          <p data-lng-key="measurementsP_2">
+            Przeprowadzamy pomiary oświetlenia na stanowiskach pracy i strefach ewakuacyjnych, 
+            aby spełnić wymagania BHP i zapewnić komfort użytkowników. 
+            Działamy zgodnie z wytycznymi PN-EN 12464-1, co pozwala stworzyć 
+            zdrowe i bezpieczne warunki pracy. 
+            <br/><br/>
+            W razie potrzeby doradzamy w wyborze odpowiedniego systemu oświetlenia (LED, świetlówki, 
+            halogeny) z uwzględnieniem specyfiki produkcji i aspektów ekonomicznych.
+          </p>
           <a href="#kontakt" class="service-cta">Zapytaj o pomiary</a>
         </div>
       </div>
@@ -890,13 +910,14 @@
           <h3 data-lng-key="measurementsH3_3">Pomiary termowizyjne</h3>
         </div>
         <div class="service-desc">
-          Za pomocą kamer termowizyjnych lokalizujemy przegrzewające się elementy, przeciążenia 
-          i nieszczelności. To skuteczna metoda zapobiegania pożarom, redukcji strat energii 
-          oraz wczesnego wykrywania wad instalacji, zgodnie z normami PN-EN ISO 9712. 
-          <br/><br/>
-          Regularne pomiary termowizyjne pozwalają na precyzyjną diagnostykę stanu maszyn i instalacji, 
-          a także wspomagają planowanie działań prewencyjnych.
-          <br/><br/>
+          <p data-lng-key="measurementsP_3">
+            Za pomocą kamer termowizyjnych lokalizujemy przegrzewające się elementy, przeciążenia 
+            i nieszczelności. To skuteczna metoda zapobiegania pożarom, redukcji strat energii 
+            oraz wczesnego wykrywania wad instalacji, zgodnie z normami PN-EN ISO 9712. 
+            <br/><br/>
+            Regularne pomiary termowizyjne pozwalają na precyzyjną diagnostykę stanu maszyn i instalacji, 
+            a także wspomagają planowanie działań prewencyjnych.
+          </p>
           <a href="#kontakt" class="service-cta">Zapytaj o termowizję</a>
         </div>
       </div>
@@ -1300,7 +1321,7 @@
             sync: false
           }
         },
-        line_linked: {
+        links: {
           enable: true,
           distance: 150,
           color: "#ffffff",
@@ -1318,10 +1339,10 @@
         }
       },
       interactivity: {
-        detect_on: "canvas",
+        detectsOn: "canvas",
         events: {
-          onhover: { enable: true, mode: "repulse" },
-          onclick: { enable: false, mode: "push" },
+          onHover: { enable: true, mode: "repulse" },
+          onClick: { enable: false, mode: "push" },
           resize: true
         },
         modes: {
@@ -1330,7 +1351,7 @@
             duration: 0.4
           },
           push: {
-            particles_nb: 4
+            quantity: 4
           }
         }
       },
