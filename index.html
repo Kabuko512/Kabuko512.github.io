@@ -182,29 +182,45 @@
       }
     }
 
+    /*
+      MENU "OFF-CANVAS" NA MAŁYCH EKRANACH
+    */
     @media (max-width: 768px) {
-      .menu {
-        display: none; /* Początkowo ukryte */
-        position: absolute;
-        top: 60px;
-        right: 20px;
-        background: rgba(0,0,0,0.85);
-        flex-direction: column;
-        width: 180px;
-        border-radius: 5px;
-        padding: 10px 0;
+      .nav-phone {
+        display: none;
       }
-      .menu.show {
-        display: flex; /* Pokazujemy menu po kliknięciu w hamburger */
-      }
-      .menu a {
-        padding: 10px 20px;
-      }
+
+      /* Pokazujemy hamburger, menu chowamy "off-canvas" */
       .hamburger {
         display: flex;
       }
-      .nav-phone {
-        display: none;
+
+      .menu {
+        position: fixed;
+        top: 0;
+        right: -250px; /* Startowo poza ekranem */
+        width: 250px;
+        height: 100vh;
+        background: rgba(0,0,0,0.9);
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 60px 20px; /* by nie kolidowało z nawigacją */
+        transition: right 0.3s ease;
+        z-index: 9999; /* aby menu było nad resztą */
+        display: flex; /* aby nie znikało całkowicie */
+      }
+
+      .menu a {
+        width: 100%;
+        font-size: 1rem;
+        padding: 10px 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+      }
+
+      .menu.show {
+        right: 0; /* Po kliknięciu hamburgera menu wjeżdża */
       }
     }
 
@@ -663,7 +679,7 @@
     </div>
   </header>
 
-  <!-- SEKCJA: AUTOMATYKA (dłuższe opisy, zawsze widoczne) -->
+  <!-- SEKCJA: AUTOMATYKA -->
   <section id="automatyka">
     <h2 class="section-title" data-aos="fade-up" data-lng-key="automationTitle">Automatyka</h2>
     <div class="service-grid">
@@ -714,9 +730,10 @@
   <section id="instalacje">
     <h2 class="section-title" data-aos="fade-up" data-lng-key="installationsTitle">Instalacje</h2>
     <div class="card-grid">
+      <!-- 1. Instalacje elektryczne -->
       <div class="card" data-aos="flip-left">
         <img 
-          src="images/1.py.png" 
+          src="images/inst_elec.png" 
           alt="Instalacje elektryczne" 
         />
         <div class="card-content">
@@ -729,10 +746,11 @@
           </p>
         </div>
       </div>
+      <!-- 2. Instalacje wodno-kanalizacyjne -->
       <div class="card" data-aos="flip-left" data-aos-delay="200">
         <img 
-          src="images/1.py.png"" 
-          alt="Instalacje wodne" 
+          src="images/2.mont.png" 
+          alt="Instalacje wodno-kanalizacyjne" 
         />
         <div class="card-content">
           <h3 data-lng-key="installationsH3_2">Instalacje wodno-kanalizacyjne</h3>
@@ -744,6 +762,7 @@
           </p>
         </div>
       </div>
+      <!-- 3. Transport powietrza -->
       <div class="card" data-aos="flip-left" data-aos-delay="400">
         <img 
           src="images/1.py.png" 
@@ -957,7 +976,7 @@
     </div>
   </section>
 
-  <!-- SEKCJA: POZNAJ NASZ ZESPÓŁ -->
+  <!-- SEKCJA: ZESPÓŁ -->
   <section id="zespol">
     <h2 class="section-title" data-aos="fade-up" data-lng-key="teamTitle">Nasz Zespół</h2>
     <div class="team-container" data-aos="fade-up">
