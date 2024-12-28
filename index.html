@@ -28,9 +28,6 @@
 
   <!-- Font Awesome (do ikon) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <!-- Jeśli masz własny kit FontAwesome, zamień powyższą linię na:
-       <script src="https://kit.fontawesome.com/your_fontawesome_kit.js" crossorigin="anonymous"></script>
-  -->
 
   <style>
     :root {
@@ -303,6 +300,34 @@
       background-color: #27ae60; /* ciemniejszy zielony */
     }
 
+    /* Scroll Down Indicator */
+    .scroll-down {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
+      animation: bounce 2s infinite;
+      color: #fff;
+      font-size: 2rem;
+    }
+
+    .scroll-down:hover {
+      color: var(--color-primary);
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateX(-50%) translateY(0);
+      }
+      40% {
+        transform: translateX(-50%) translateY(-10px);
+      }
+      60% {
+        transform: translateX(-50%) translateY(-5px);
+      }
+    }
+
     @media (max-width: 992px) {
       .hero-content h1 {
         font-size: 2rem;
@@ -314,6 +339,9 @@
       }
       .hero-content p {
         font-size: 0.95rem;
+      }
+      .scroll-down {
+        font-size: 1.5rem;
       }
     }
 
@@ -407,75 +435,12 @@
       background: rgba(0,0,0,0.4);
     }
 
-    /* SEKCJA: INSTALACJE (z ujednoliconą strukturą) */
-    <section id="instalacje" data-aos="fade-up">
-      <h2 class="section-title" data-lng-key="installationsTitle">Instalacje</h2>
-      <div class="service-grid">
-        <!-- 1. Instalacje elektryczne -->
-        <div class="service-item" data-aos="fade-up">
-          <div class="service-top">
-            <i class="fas fa-bolt"></i>
-            <h3 data-lng-key="installationsH3_1">Instalacje elektryczne</h3>
-          </div>
-          <div class="service-desc">
-            <p data-lng-key="installationsP_1">
-              Projektujemy i wykonujemy trasy kablowe (rurowe, korytowe, wtynkowe) 
-              z zachowaniem wszelkich wymagań norm PN-IEC/EN. Każda instalacja 
-              jest weryfikowana pod kątem bezpieczeństwa i niezawodności, 
-              gwarantując wieloletnie, bezawaryjne działanie.
-            </p>
-          </div>
-        </div>
-        <!-- 2. Instalacje wodno-kanalizacyjne -->
-        <div class="service-item" data-aos="fade-up" data-aos-delay="100">
-          <div class="service-top">
-            <i class="fas fa-water"></i>
-            <h3 data-lng-key="installationsH3_2">Instalacje wodno-kanalizacyjne</h3>
-          </div>
-          <div class="service-desc">
-            <p data-lng-key="installationsP_2">
-              Wdrażamy nowoczesne i tradycyjne technologie (stalowe gwintowane, 
-              systemy prasowane, tworzywa sztuczne). Zapewniamy kompletne 
-              wsparcie – od projektu, przez montaż i testy, aż po dokumentację
-              potwierdzającą zgodność z wymaganymi normami sanitarnymi i BHP.
-            </p>
-          </div>
-        </div>
-        <!-- 3. Transport powietrza -->
-        <div class="service-item" data-aos="fade-up" data-aos-delay="200">
-          <div class="service-top">
-            <i class="fas fa-wind"></i>
-            <h3 data-lng-key="installationsH3_3">Transport powietrza</h3>
-          </div>
-          <div class="service-desc">
-            <p data-lng-key="installationsP_3">
-              Projektujemy i realizujemy trasy sprężonego powietrza w zakładach przemysłowych, 
-              magazynach i budynkach użyteczności publicznej, uwzględniając normy ciśnieniowe 
-              i wymagania odnośnie bezpieczeństwa. Dbamy o optymalną wydajność,
-              aby obniżyć koszty związane z eksploatacją systemów pneumatycznych.
-            </p>
-          </div>
-        </div>
-      </div>
-      <!-- CTA na końcu sekcji -->
-      <div style="text-align:center; margin-top: 30px;">
-        <a href="#kontakt" class="service-cta">Zapytaj o instalacje</a>
-      </div>
-    </section>
+    /* SEKCJA: INSTALACJE */
+    section#instalacje {
+      /* Sekcja już ujednolicona z innymi */
+    }
 
-    /* Jeśli chcesz dodać ikony do instalacji, upewnij się, że używasz odpowiednich klas FontAwesome.
-       Przykładowo, zamiast ikony `fas fa-wind`, możesz użyć innej pasującej ikony.
-    */
-
-    /* Karty z obrazkami zostały zastąpione standardowymi `service-item` z ikonami i tekstem. */
-
-    /* Jeśli chcesz zachować obrazki, możesz je dodać wewnątrz `.service-top` lub jako tło w `.service-item`.
-       Jednakże dla ujednolicenia, zaleca się używanie ikon, podobnie jak w innych sekcjach.
-    */
-
-    /* ----------------------------------------------------------
-       CASE STUDIES - bullet points
-    ---------------------------------------------------------- */
+    /* CASE STUDIES - bullet points */
     .case-study {
       margin-bottom: 40px;
     }
@@ -697,6 +662,10 @@
       <button class="hero-btn" onclick="document.querySelector('#kontakt').scrollIntoView({behavior: 'smooth'});">
         Skontaktuj się z nami
       </button>
+    </div>
+    <!-- Scroll Down Indicator -->
+    <div class="scroll-down" onclick="scrollToSection('automatyka')">
+      <i class="fas fa-chevron-down"></i>
     </div>
   </header>
 
@@ -1274,6 +1243,14 @@
       const langBtn = document.getElementById("langBtn");
       langBtn.innerText = currentLang === 'pl' ? "EN" : "PL";
     }
+
+    // Funkcja do przewijania do wybranej sekcji
+    function scrollToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
   </script>
 
   <!-- Konfiguracja tsParticles (efekt cząsteczek w tle) -->
@@ -1321,7 +1298,7 @@
             sync: false
           }
         },
-        links: {
+        links: { /* Zmieniono z line_linked na links */
           enable: true,
           distance: 150,
           color: "#ffffff",
